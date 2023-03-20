@@ -11,47 +11,30 @@
 use clap::Parser;
 use clap_interactive::*;
 use include_dir::{include_dir, Dir};
+use struct_field_names_as_array::FieldNamesAsArray;
 
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
+#[derive(FieldNamesAsArray)]
 struct SomeStruct {
     project_name: String,
     author_name: String,
     no_reply_email: String,
-    cli_app_name: Option<String>,
+    cli_app_name: String,
     test_coverage_min: u8,
 }
 
 fn main() {
     let user_input = SomeStruct::interactive_parse().unwrap();
-    println!("{:?}", user_input);
+    let replacement_tokens = SomeStruct::FIELD_NAMES_AS_ARRAY
+        .iter()
+        .map(|&s| format!("${{ {} }}", s))
+        .collect::<Vec<String>>();
 
-    /////////////////////////////////
+    println!("{:?}", replacement_tokens);
 
-    let assets = ASSETS_DIR.clone();
-
-    let entries = ASSETS_DIR.entries();
-
-    println!("-------------");
-    for entry in entries {
-        println!("{:?}\n\n", entry.children());
-        match entry {
-            include_dir::DirEntry::File(file) => {
-                println!("FILE: {:?}\n\n", file);
-            }
-            include_dir::DirEntry::Dir(dir) => {
-                println!("DIR: {:?}\n\n", dir);
-            }
-        }
-    }
-
-    println!("-------------");
-    recursive_print(assets);
-
-    println!("-------------");
-    println!("-------------");
     println!("-------------");
     println!("Writing files to {:?}", user_input.project_name);
     // copy PROJECT_DIR to a current directory
@@ -75,20 +58,6 @@ fn recursive_replace(dir: Dir, name: &str) {
             }
             include_dir::DirEntry::Dir(dir) => {
                 recursive_replace(dir.clone(), name);
-            }
-        }
-    }
-}
-
-fn recursive_print(dir: Dir) {
-    for entry in dir.entries() {
-        match entry {
-            include_dir::DirEntry::File(file) => {
-                println!("FILE: {:?}\n\n", file);
-            }
-            include_dir::DirEntry::Dir(dir) => {
-                println!("DIR: {:?}\n\n", dir);
-                recursive_print(dir.clone());
             }
         }
     }
