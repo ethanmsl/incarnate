@@ -1,19 +1,15 @@
 [tool.poetry]
-name = "PKG_NAME"
+name = "${{ carnate.project_name }}"
 version = "0.1.0"
 description = ""
-authors = ["AUTHOR_NAME <AUTHOR_EMAIL@users.noreply.github.com>"]
+authors = ["${{ carnate.author_name }} <${{ carnate.no_reply_email }}@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "PKG_NAME", from = "src"}]
-
-
-# # declares name of CLI app and where the insertion point is
-# [tool.poetry.scripts]
-# cli-app-name = "pkg_name.commands:app"
+packages = [{include = "${{ carnate.project_name }}", from = "src"}]
+${{ carnate.cli_app_name }}
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 
 
 [tool.poetry.group.dev.dependencies]

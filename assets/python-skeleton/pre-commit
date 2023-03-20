@@ -39,9 +39,9 @@ NC='\033[0m' # No Color
 
 
 ##====================================================================================##
-package_name=""  # MANUALLY add package name here
+package_name="${{ carnate.project_name }}"  # MANUALLY add package name here
 docs_dir="dev_docs"  # directory for `pdoc` to add files
-test_coverage_min=80  # below this result the `coverage` test will fail
+test_coverage_min=${{ carnate.test_coverage_min }}  # below this result the `coverage` test will fail
 ##====================================================================================##
 
 

@@ -12,7 +12,7 @@ orbs:
 jobs:
   build-info:
     docker: 
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
     steps:
       - checkout
       - python/install-packages:
@@ -44,7 +44,7 @@ jobs:
           command: poetry run pyright src/ tests/
       - run:
           name: pytest_and_coverage
-          command: poetry run pytest --cov-report term-missing --cov-fail-under=80 --cov=src tests/
+          command: poetry run pytest --cov-report term-missing --cov-fail-under=${{ carnate.test_coverage_min }} --cov=src tests/
       - run:
           name: poetry_check
           command: poetry check

@@ -1,4 +1,12 @@
-//! demo from front page of [clap-interactive](https://lib.rs/crates/clap-interactive)
+//! Skeleton Repo Incarnater
+//! API for Skeleton Repo Use
+
+//
+//
+// # # declares name of CLI app and where the insertion point is
+// # [tool.poetry.scripts]
+// # cli-app-name = "pkg_name.commands:app"
+
 #![allow(clippy::uninlined_format_args)]
 use clap::Parser;
 use clap_interactive::*;
@@ -9,17 +17,11 @@ static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct SomeStruct {
-    #[command(subcommand)]
-    subcommand_field: SubCommand,
-    arg: String,
-}
-
-#[derive(Parser, Debug)]
-#[clap(rename_all = "snake_case", infer_subcommands = true)]
-enum SubCommand {
-    Commit { message: String },
-    Clone { address: String },
-    Boogita { num: u32 },
+    project_name: String,
+    author_name: String,
+    no_reply_email: String,
+    cli_app_name: Option<String>,
+    test_coverage_min: u8,
 }
 
 fn main() {
@@ -51,16 +53,16 @@ fn main() {
     println!("-------------");
     println!("-------------");
     println!("-------------");
-    println!("Writing files to {:?}", user_input.arg);
+    println!("Writing files to {:?}", user_input.project_name);
     // copy PROJECT_DIR to a current directory
-    let path = format!("parent/{}/", user_input.arg);
+    let path = format!("parent/{}/", user_input.project_name);
 
     // ASSETS_DIR.extract(path).unwrap();
     let newb = Dir::new(&path, ASSETS_DIR.entries());
     println!("newb: {:?}", newb);
     newb.extract("blaaaap").unwrap();
 
-    recursive_replace(newb, &user_input.arg);
+    recursive_replace(newb, &user_input.project_name);
 }
 
 fn recursive_replace(dir: Dir, name: &str) {
