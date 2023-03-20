@@ -1,0 +1,3 @@
+Hi I'm the main text file.
+
+And ${{ replace.main_1 }} is the main text file's variable text.
