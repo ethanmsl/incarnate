@@ -50,7 +50,11 @@ fn git_initial_commit(path: &Path) -> io::Result<()> {
     let abs_path_proj = cwd + "/" + pathstring;
 
     let mut git_cmd = Command::new("git");
-    git_cmd.arg("commit").arg("--message").arg("Initial commit");
+    git_cmd
+        .arg("commit")
+        .arg("--message")
+        .arg("Initial commit")
+        .arg("--no-verify");
     git_cmd
         .current_dir(abs_path_proj)
         .output()
