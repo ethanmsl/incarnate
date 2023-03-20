@@ -29,6 +29,17 @@ fn main() {
     // // of course, you can retrieve a file by its full path
     // let asst_tree = PROJECT_DIR.get_file("assets/").unwrap();
 
-    // copy PROJECT_DIR to a current directory
-    ASSETS_DIR.extract("created-assets/").unwrap();
+    // // copy PROJECT_DIR to a current directory
+    // ASSETS_DIR.extract("created-assets/").unwrap();
+    // let entries = ASSETS_DIR.entries();
+    let dirs = ASSETS_DIR.dirs();
+
+    for entry in dirs {
+        println!("{:?}", entry);
+    }
+    // let equality = entries == dirs;
+
+    // // This only lists files shallowly, not recursively
+    // let files = ASSETS_DIR.files().collect::<Vec<_>>();
+    // dbg!(files);
 }
