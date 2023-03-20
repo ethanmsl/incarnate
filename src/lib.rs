@@ -1,5 +1,7 @@
 use std::path::Path;
 
+/// works through a nested Enum or corresponding Dir & File value
+/// replacing patterns present in files or in path names
 pub fn recursive_replace(dir: include_dir::Dir, pattern_val_pairs: &[(&str, &String)]) {
     for entry in dir.entries() {
         match entry {
@@ -26,6 +28,8 @@ pub fn recursive_replace(dir: include_dir::Dir, pattern_val_pairs: &[(&str, &Str
     }
 }
 
+/// checks file contents for any of an array of str patterns
+/// and replace them with a pair value if present
 fn replace_file_contents(
     file: &include_dir::File,
     pattern_val_pairs: &[(&str, &String)],
@@ -43,6 +47,7 @@ fn replace_file_contents(
     }
 }
 
+/// writes files, creating directories as needed
 fn write_file(filepath: &Path, hydrated_string: String) {
     println!("Writing file to {:?}", filepath);
     std::fs::create_dir_all(filepath.parent().expect("no parent")).expect("unable to create dir");
