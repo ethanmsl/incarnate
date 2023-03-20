@@ -32,7 +32,7 @@ struct SomeStruct {
 }
 
 fn main() {
-    let user_input = SomeStruct::interactive_parse().unwrap();
+    let user_input = SomeStruct::interactive_parse().expect("unable to parse user input");
     let replacement_tokens = SomeStruct::FIELD_NAMES_AS_ARRAY
         .iter()
         .map(|&s| format!("${{ {} }}", s))
@@ -55,11 +55,14 @@ fn recursive_replace(dir: Dir, name: &str) {
     for entry in dir.entries() {
         match entry {
             include_dir::DirEntry::File(file) => {
-                let input = file.contents_utf8().unwrap();
+                let input = file
+                    .contents_utf8()
+                    .expect("failure at existance of `contents_utf8`");
                 let output = input.replace("${{ name }}", name);
                 println!("Writing file to {:?}", file.path());
-                std::fs::create_dir_all(file.path().parent().unwrap()).unwrap();
-                std::fs::write(file.path(), output).unwrap();
+                std::fs::create_dir_all(file.path().parent().expect("no parent"))
+                    .expect("unable to create dir");
+                std::fs::write(file.path(), output).expect("unable to write file");
             }
             include_dir::DirEntry::Dir(dir) => {
                 recursive_replace(dir.clone(), name);
