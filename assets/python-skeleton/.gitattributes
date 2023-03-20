@@ -1,0 +1,5 @@
+# See 'GitHub Linguist Overrides' for more information
+# https://github.com/github/linguist/blob/master/docs/overrides.md
+
+# prevent 'dev_docs' content from being counted in repo language statistics
+dev_docs/** linguist-documentation

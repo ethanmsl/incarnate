@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+# ^ uses `env` command (via that path) to get path variables and then call `bash`
+#   according to first occurence found
+#
+# Name this script "pre-commit" and place it in the ".git/hooks/" directory
+
+
+##====================================================================================##
+# If any command fails, exit immediately with that command's exit status
+# Exit if an attempt to expand an unset variable
+# Write output to stdout
+set -euo pipefail
+##====================================================================================##
+
+
+##====================================================================================##
+## ANSI Color Codes for use with echo command
+## in order to ensure robustness we've just placed these in the hook itself
+##                                                     (rather than source another file)
+## Just comment in/out as needed if you decide to edit
+# BLACK='\033[0;30m'
+# RED='\033[0;31m'
+GREEN='\033[0;32m'
+# BROWN='\033[0;33m'
+# BLUE='\033[0;34m'
+# PURPLE='\033[0;35m'
+# CYAN='\033[0;36m'
+# LIGHT_GRAY='\033[0;37m'
+DARK_GRAY='\033[1;30m'
+# LIGHT_RED='\033[1;31m'
+LIGHT_GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+# LIGHT_BLUE='\033[1;34m'
+# LIGHT_PURPLE='\033[1;35m'
+# LIGHT_CYAN='\033[1;36m'
+# WHITE='\033[1;37m'
+NC='\033[0m' # No Color
+##====================================================================================##
+
+
+##====================================================================================##
+package_name=""  # MANUALLY add package name here
+docs_dir="dev_docs"  # directory for `pdoc` to add files
+test_coverage_min=80  # below this result the `coverage` test will fail
+##====================================================================================##
+
+
+##====================================================================================##
+echo -e "${DARK_GRAY}==============${YELLOW}Beginning of Pre-Commit Hook Script${DARK_GRAY}===============${NC}"
+
+# Run isort against all code in the `src/` & `tests/` directories
+echo -e "${DARK_GRAY}================================================================${NC}"
+echo -e "${YELLOW}running isort...${NC}"
+echo
+isort src/ tests/ --check-only --diff
+echo
+echo -e "${GREEN}Isort passed!${NC}"
+echo -e "${DARK_GRAY}================================================================${NC}"
+
+# Run black against all code in the `src/` & `tests/` directories
+echo -e "${DARK_GRAY}================================================================${NC}"
+echo -e "${YELLOW}running Black...${NC}"
+echo
+black src/ tests/ --check
+echo
+echo -e "${GREEN}Black passed!${NC}"
+echo -e "${DARK_GRAY}================================================================${NC}"
+
+# Run Pylint against all code in the `src/` & `tests/` directories
+echo -e "${DARK_GRAY}================================================================${NC}"
+echo -e "${YELLOW}running Pylint...${NC}"
+echo
+pylint src/ tests/
+echo
+echo -e "${GREEN}Pylint passed!${NC}"
+echo -e "${DARK_GRAY}================================================================${NC}"
+
+# Run Pyright for errors against all code in the `src/` & `tests/` directories
+echo -e "${DARK_GRAY}================================================================${NC}"
+echo -e "${YELLOW}running Pyright for Errors...${NC}"
+echo
+pyright src/ tests/
+echo
+echo -e "${GREEN}Pyright Error-check passed!${NC}"
+echo -e "${DARK_GRAY}================================================================${NC}"
+
+# # for well-typing python *libraries*:
+# # Run Pyright for completness against the *installed package*
+# echo -e "${DARK_GRAY}================================================================${NC}"
+# echo -e "${YELLOW}running Pyright for Type-Completeness on installed package...${NC}"
+# echo
+# pyright --verifytypes $package_name
+# echo
+# echo -e "${GREEN}Pyright Type-Completeness report (for installed package) available.${NC}"
+# echo -e "${LIGHT_GREEN}(See above for results)${NC}"
+# echo -e "${DARK_GRAY}================================================================${NC}"
+
+# Run Pytest; running all `test_.*` patterned files in the `tests/` directory
+echo -e "${DARK_GRAY}================================================================${NC}"
+echo -e "${YELLOW}running Pytest...${NC}"
+echo
+pytest --cov-report term-missing --cov-fail-under=$test_coverage_min --cov=src tests/
+echo
+echo -e "${GREEN}Pytest passed!${NC}"
+echo -e "${DARK_GRAY}================================================================${NC}"
+
+# Check that Poetry state doesn't detect any errors (NOTE: non-exhaustive)
+echo -e "${DARK_GRAY}================================================================${NC}"
+echo -e "${YELLOW}running Poetry-Check...${NC}"
+echo
+poetry check
+echo
+echo -e "${GREEN}Poetry-Check passed!${NC}"
+echo -e "${DARK_GRAY}================================================================${NC}"
+
+# (re)Generate requirements*.txt matching poetry.lock
+echo -e "${DARK_GRAY}================================================================${NC}"
+echo -e "${YELLOW}running Poetry-Export...${NC}"
+echo
+poetry export --format=requirements.txt --output=requirements.txt --without=dev
+poetry export --format=requirements.txt --output=requirements-dev.txt --only=dev
+echo
+echo -e "${GREEN}'requirements.txt' & 'requirements-dev.txt' generated!${NC}"
+echo -e "${DARK_GRAY}================================================================${NC}"
+
+# Generate fresh docs with pdoc
+echo -e "${DARK_GRAY}================================================================${NC}"
+echo -e "${YELLOW}clearing '${docs_dir}/' and running Pdoc...${NC}"
+echo
+rm -rf ${docs_dir}/
+pdoc src/* tests/ --output-directory=${docs_dir}/
+echo
+echo -e "${GREEN}Pdoc docs generated!${NC}"
+echo -e "${DARK_GRAY}================================================================${NC}"
+
+
+echo -e "${DARK_GRAY}=================${LIGHT_GREEN}End of Pre-Commit Hook Script${DARK_GRAY}==================${NC}"
+##====================================================================================##
+# END OF SCRIPT

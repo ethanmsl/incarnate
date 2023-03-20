@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "PKG_NAME"
+version = "0.1.0"
+description = ""
+authors = ["AUTHOR_NAME <AUTHOR_EMAIL@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "PKG_NAME", from = "src"}]
+
+
+# # declares name of CLI app and where the insertion point is
+# [tool.poetry.scripts]
+# cli-app-name = "pkg_name.commands:app"
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+isort = "^5.12.0"
+pdoc = "^12.3.1"
+pylint = "^2.15.10"
+pyright = "^1.1.291"
+pytest = "^7.2.1"
+pytest-cov = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.isort]
+# compatibility with Black formatter
+profile = "black"
+
+
+# # example repo-wide pylint disablement section
+# [tool.pylint]
+# disable = [
+#     "C0303",  # trailing-whitespace
+#     "R0903",  # too-few-public-methods
+# ]
+
+[tool.pylint.format]
+# line length to match Black formatter
+max-line-length = "88"
+
+
+[tool.pyright]
+include = ["src"]
+exclude = [".venv",
+    "src/experimental",
+    "src/typestubs",
+  "**/__pycache__"
+]
+# utilizing the fact that we've set Poetry `virtualenv.in-project` to true
+venvPath = "."
+venv = ".venv"
+
+typeCheckingMode = "basic"  # "off", "basic", "strict"
+reportMissingImports = true
+reportMissingTypeStubs = true
+
+executionEnvironments = [
+  { root = "src" }
+]
+
+
+[tool.pytest.ini_options]
+# adds the following paths to pythonpath, specified relative to root dir
+pythonpath = [
+    "src",
+]
