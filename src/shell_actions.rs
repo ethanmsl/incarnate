@@ -4,18 +4,49 @@
 /// - the `pre-commit` hook is created as a non-executable file
 /// - running `git init` helps ensure users normal git settings are respected
 use std::env;
+use std::io;
+use std::path::Path;
 use std::process::Command;
 
-pub fn git_init() {
+// fn git_init() -> io::Result<()> {
+//     // bind git command
+//     // init in project directory just created
+//     let mut git_cmd = Command::new("git");
+//     git_cmd.arg("init");
+//
+//     git_cmd.output()?;
+//     Ok(())
+// }
+//
+// fn git_add_all() -> io::Result<()> {
+//     // bind git command
+//     // add all files in project directory just created
+//     let mut git_cmd = Command::new("git");
+//     git_cmd.arg("add").arg(".");
+//
+//     git_cmd.output()?;
+//     Ok(())
+// }
+//
+// fn git_initial_commit() -> io::Result<()> {
+//     // bind git command
+//     // add all files in project directory just created
+//     let mut git_cmd = Command::new("git");
+//     git_cmd.arg("commit").arg("--message");
+//
+//     git_cmd.output()?;
+//     Ok(())
+// }
+
+pub fn git_init(path: &Path) -> io::Result<()> {
+    let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
-    println!("Current working directory: {}", cwd);
+    let abs_path_proj = cwd + "/" + pathstring;
 
     let mut git_cmd = Command::new("git");
-    git_cmd.arg("log");
-    let output = git_cmd.output().unwrap();
-    println!("status: {}", output.status);
-    println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
-    println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
+    git_cmd.arg("init");
+    git_cmd.current_dir(abs_path_proj).output().unwrap();
+    Ok(())
 }
 
 fn get_current_working_dir() -> String {

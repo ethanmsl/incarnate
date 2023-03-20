@@ -11,6 +11,7 @@ use clap::Parser;
 use clap_interactive::*;
 use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
+use std::path::Path;
 use struct_field_names_as_array::FieldNamesAsArray;
 
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
@@ -55,5 +56,6 @@ fn main() {
     let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
 
     template_populator::recursive_replace(new_dir_copy, &replacement_pairs);
-    shell_actions::git_init();
+    let proj_relative_path = Path::new(&user_input.project_name);
+    shell_actions::git_init(proj_relative_path).expect("Failed to initialize git repo");
 }
