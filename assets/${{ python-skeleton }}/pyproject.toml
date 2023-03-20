@@ -5,11 +5,16 @@ description = ""
 authors = ["${{ carnate.author_name }} <${{ carnate.no_reply_email }}@users.noreply.github.com>"]
 readme = "README.md"
 packages = [{include = "${{ carnate.project_name }}", from = "src"}]
-${{ carnate.cli_app_name }}
+
+
+# declares name of CLI app and where the insertion point is
+[tool.poetry.scripts]
+${{ carnate.cli_app_name }} = "pkg_name.commands:app"
 
 
 [tool.poetry.dependencies]
 python = "^3.11"
+typer = {extras = ["all"], version = "^0.7.0"}
 
 
 [tool.poetry.group.dev.dependencies]
