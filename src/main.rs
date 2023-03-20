@@ -53,14 +53,14 @@ fn recursive_replace(dir: Dir, name: &str) {
     for entry in dir.entries() {
         match entry {
             include_dir::DirEntry::File(file) => {
-                let input = file
+                let file_raw = file
                     .contents_utf8()
                     .expect("failure at existance of `contents_utf8`");
-                let output = input.replace("${{ name }}", name);
+                let file_hydrated = file_raw.replace("${{ name }}", name);
                 println!("Writing file to {:?}", file.path());
                 std::fs::create_dir_all(file.path().parent().expect("no parent"))
                     .expect("unable to create dir");
-                std::fs::write(file.path(), output).expect("unable to write file");
+                std::fs::write(file.path(), file_hydrated).expect("unable to write file");
             }
             include_dir::DirEntry::Dir(dir) => {
                 recursive_replace(dir.clone(), name);
