@@ -4,7 +4,7 @@ use clap::Parser;
 use clap_interactive::*;
 use include_dir::{include_dir, Dir};
 
-static PROJECT_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
+static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -30,5 +30,5 @@ fn main() {
     // let asst_tree = PROJECT_DIR.get_file("assets/").unwrap();
 
     // copy PROJECT_DIR to a current directory
-    PROJECT_DIR.extract("created-assets/").unwrap();
+    ASSETS_DIR.extract("created-assets/").unwrap();
 }
