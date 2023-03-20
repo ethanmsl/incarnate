@@ -49,10 +49,9 @@ fn main() {
     println!("-------------");
     println!("Writing files to {:?}", user_input.project_name);
     // copy PROJECT_DIR to a current directory
+    // NOTE: this can probably be removed on refactor with proper referencing of `ASSETS_DIR`
     let path = format!("parent/{}/", user_input.project_name);
+    let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
 
-    let newb = Dir::new(&path, ASSETS_DIR.entries());
-    println!("newb: {:?}", newb);
-
-    incarnate::recursive_replace(newb, &replacement_pairs);
+    incarnate::recursive_replace(new_dir_copy, &replacement_pairs);
 }
