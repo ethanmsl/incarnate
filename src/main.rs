@@ -57,10 +57,8 @@ fn main() {
     // copy PROJECT_DIR to a current directory
     let path = format!("parent/{}/", user_input.project_name);
 
-    // ASSETS_DIR.extract(path).unwrap();
     let newb = Dir::new(&path, ASSETS_DIR.entries());
     println!("newb: {:?}", newb);
-    newb.extract("blaaaap").unwrap();
 
     recursive_replace(newb, &user_input.project_name);
 }
