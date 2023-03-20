@@ -26,7 +26,7 @@ def version_callback(version: bool):
     Print app version and exit
     """
     if version:
-        rprint(f"{{ carnate.project_name }} ('${{ carnate.cli_app_name }}') Version: {__version__}")
+        rprint(f"${{ carnate.project_name }} ('${{ carnate.cli_app_name }}') Version: {__version__}")
         raise typer.Exit()
 
 
