@@ -12,6 +12,9 @@ pub fn recursive_replace(dir: include_dir::Dir, pattern_val_pairs: &[(&str, &Str
                     .to_str()
                     .expect("unable to convert path to str")
                     .replace(pattern_val_pairs[0].0, pattern_val_pairs[0].1);
+                // got into some opaque work regarding lifetime counting
+                // so leaveing this here for right now
+
                 let path = Path::new(&pathstring);
                 write_file(path, hydrated_string);
             }
@@ -38,6 +41,16 @@ fn replace_file_contents(
         None => None,
     }
 }
+
+// fn replace_path_values(file: include_dir::File, pattern_val_pairs: &[(&str, &String)]) -> &Path {
+//     let pathstring = file
+//         .path()
+//         .to_str()
+//         .expect("unable to convert path to str")
+//         .replace(pattern_val_pairs[0].0, pattern_val_pairs[0].1);
+//     let path = Path::new(&pathstring);
+//     path
+// }
 
 fn write_file(filepath: &Path, hydrated_string: String) {
     println!("Writing file to {:?}", filepath);
