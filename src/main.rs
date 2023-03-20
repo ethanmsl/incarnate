@@ -23,6 +23,14 @@ enum SubCommand {
 }
 
 fn main() {
+    // using `include_str!`
+    // and using `.replace`
+    let input = include_str!("../assets/example/main/main.txt");
+    let output = input.replace("${{name}}", "John Doe");
+    std::fs::write("output.txt", output).unwrap();
+
+    /////////////////////////////////
+
     let user_input = SomeStruct::interactive_parse().unwrap();
     println!("{:?}", user_input);
 
