@@ -9,7 +9,7 @@ packages = [{include = "${{ carnate.project_name }}", from = "src"}]
 
 # declares name of CLI app and where the insertion point is
 [tool.poetry.scripts]
-${{ carnate.cli_app_name }} = "pkg_name.commands:app"
+${{ carnate.cli_app_name }} = "${{ carnate.project_name }}.commands:app"
 
 
 [tool.poetry.dependencies]
