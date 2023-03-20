@@ -8,37 +8,14 @@ use std::io;
 use std::path::Path;
 use std::process::Command;
 
-// fn git_init() -> io::Result<()> {
-//     // bind git command
-//     // init in project directory just created
-//     let mut git_cmd = Command::new("git");
-//     git_cmd.arg("init");
-//
-//     git_cmd.output()?;
-//     Ok(())
-// }
-//
-// fn git_add_all() -> io::Result<()> {
-//     // bind git command
-//     // add all files in project directory just created
-//     let mut git_cmd = Command::new("git");
-//     git_cmd.arg("add").arg(".");
-//
-//     git_cmd.output()?;
-//     Ok(())
-// }
-//
-// fn git_initial_commit() -> io::Result<()> {
-//     // bind git command
-//     // add all files in project directory just created
-//     let mut git_cmd = Command::new("git");
-//     git_cmd.arg("commit").arg("--message");
-//
-//     git_cmd.output()?;
-//     Ok(())
-// }
+pub fn git_setup(path: &Path) -> io::Result<()> {
+    git_init(path)?;
+    git_add_all(path)?;
+    git_initial_commit(path)?;
+    Ok(())
+}
 
-pub fn git_init(path: &Path) -> io::Result<()> {
+fn git_init(path: &Path) -> io::Result<()> {
     let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
     let abs_path_proj = cwd + "/" + pathstring;
@@ -49,6 +26,27 @@ pub fn git_init(path: &Path) -> io::Result<()> {
     Ok(())
 }
 
+fn git_add_all(path: &Path) -> io::Result<()> {
+    let pathstring = path.to_str().expect("Failed to convert path to string");
+    let cwd = get_current_working_dir();
+    let abs_path_proj = cwd + "/" + pathstring;
+
+    let mut git_cmd = Command::new("git");
+    git_cmd.arg("add").arg(".");
+    git_cmd.current_dir(abs_path_proj).output().unwrap();
+    Ok(())
+}
+
+fn git_initial_commit(path: &Path) -> io::Result<()> {
+    let pathstring = path.to_str().expect("Failed to convert path to string");
+    let cwd = get_current_working_dir();
+    let abs_path_proj = cwd + "/" + pathstring;
+
+    let mut git_cmd = Command::new("git");
+    git_cmd.arg("commit").arg("--message").arg("Initial commit");
+    git_cmd.current_dir(abs_path_proj).output().unwrap();
+    Ok(())
+}
 fn get_current_working_dir() -> String {
     let res = env::current_dir();
     match res {

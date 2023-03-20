@@ -57,5 +57,5 @@ fn main() {
 
     template_populator::recursive_replace(new_dir_copy, &replacement_pairs);
     let proj_relative_path = Path::new(&user_input.project_name);
-    shell_actions::git_init(proj_relative_path).expect("Failed to initialize git repo");
+    shell_actions::git_setup(proj_relative_path).expect("Failed to perform git repo setup");
 }
