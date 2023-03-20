@@ -33,12 +33,10 @@ struct SomeStruct {
 
 fn main() {
     let user_input = SomeStruct::interactive_parse().expect("unable to parse user input");
-    let replacement_tokens = SomeStruct::FIELD_NAMES_AS_ARRAY
+    let _replacement_tokens = SomeStruct::FIELD_NAMES_AS_ARRAY
         .iter()
         .map(|&s| format!("${{ {} }}", s))
         .collect::<Vec<String>>();
-
-    println!("{:?}", replacement_tokens);
 
     println!("-------------");
     println!("Writing files to {:?}", user_input.project_name);
