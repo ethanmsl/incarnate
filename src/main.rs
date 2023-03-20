@@ -1,5 +1,10 @@
 //! Skeleton Repo Incarnater
 //! API for Skeleton Repo Use
+//!
+//! # Build Note:
+//!     `.DS_Store` files have caused errors before
+//!     presently I'm just deleting them
+//!     ```find . -name ".DS_Store" -delete```
 
 //
 //
