@@ -1,18 +1,13 @@
+use std::path::Path;
+
 pub fn recursive_replace(dir: include_dir::Dir, pattern_val_pairs: &[(&str, &String)]) {
     for entry in dir.entries() {
         match entry {
             include_dir::DirEntry::File(file) => {
-                let file_h = match replace_file_contents(file, pattern_val_pairs) {
-                    Some(file_h) => file_h,
-                    None => {
-                        continue;
-                    }
-                };
+                let hydrated_string = replace_file_contents(file, pattern_val_pairs)
+                    .expect("unable to find utf8 file contents");
 
-                println!("Writing file to {:?}", file.path());
-                std::fs::create_dir_all(file.path().parent().expect("no parent"))
-                    .expect("unable to create dir");
-                std::fs::write(file.path(), file_h).expect("unable to write file");
+                write_file(file.path(), hydrated_string);
             }
             include_dir::DirEntry::Dir(dir) => {
                 recursive_replace(dir.clone(), pattern_val_pairs);
@@ -38,6 +33,11 @@ fn replace_file_contents(
     }
 }
 
+fn write_file(filepath: &Path, hydrated_string: String) {
+    println!("Writing file to {:?}", filepath);
+    std::fs::create_dir_all(filepath.parent().expect("no parent")).expect("unable to create dir");
+    std::fs::write(filepath, hydrated_string).expect("unable to write file");
+}
 // #[cfg(test)]
 // mod tests {
 //     use super::*;
