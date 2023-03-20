@@ -10,9 +10,9 @@ use std::process::Command;
 
 pub fn git_setup(path: &Path) -> io::Result<()> {
     git_init(path)?;
+    move_pre_commit_hook(path)?;
     git_add_all(path)?;
     git_initial_commit(path)?;
-    move_pre_commit_hook(path)?;
     Ok(())
 }
 
