@@ -42,28 +42,8 @@ fn replace_file_contents(
     }
 }
 
-// fn replace_path_values(file: include_dir::File, pattern_val_pairs: &[(&str, &String)]) -> &Path {
-//     let pathstring = file
-//         .path()
-//         .to_str()
-//         .expect("unable to convert path to str")
-//         .replace(pattern_val_pairs[0].0, pattern_val_pairs[0].1);
-//     let path = Path::new(&pathstring);
-//     path
-// }
-
 fn write_file(filepath: &Path, hydrated_string: String) {
     println!("Writing file to {:?}", filepath);
     std::fs::create_dir_all(filepath.parent().expect("no parent")).expect("unable to create dir");
     std::fs::write(filepath, hydrated_string).expect("unable to write file");
 }
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//
-//     #[test]
-//     fn it_works() {
-//         let result = add(2, 2);
-//         assert_eq!(result, 4);
-//     }
-// }
