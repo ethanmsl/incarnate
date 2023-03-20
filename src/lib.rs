@@ -49,7 +49,6 @@ fn replace_file_contents(
 
 /// writes files, creating directories as needed
 fn write_file(filepath: &Path, hydrated_string: String) {
-    println!("Writing file to {:?}", filepath);
     std::fs::create_dir_all(filepath.parent().expect("no parent")).expect("unable to create dir");
     std::fs::write(filepath, hydrated_string).expect("unable to write file");
 }
