@@ -97,8 +97,7 @@ def pword(
 
 
 @app.command(rich_help_panel="Visual")
-@app.command("spin")
-def spinner_example(seconds: int = typer.Argument(5, min=1, max=36)) -> None:
+def spin(seconds: int = typer.Argument(5, min=1, max=36)) -> None:
     """Example of a progress bar"""
 
     with Progress(
@@ -114,8 +113,7 @@ def spinner_example(seconds: int = typer.Argument(5, min=1, max=36)) -> None:
 
 
 @app.command(rich_help_panel="Visual")
-@app.command("progbar")
-def progress_bar_example(
+def progbar(
     seconds: int = typer.Argument(5, min=1, max=16), plain_bar: bool = False
 ) -> None:
     """
@@ -158,12 +156,11 @@ def adding_tags() -> None:
 
 
 @app.command(rich_help_panel="Yet To Be Implemented")
-@app.command("nums")
 def numeric_intake(
     x_int: int = typer.Argument(..., min=0, max=2),
     y_int: int = typer.Argument(..., min=-1, max=1),
 ) -> int:
-    """testing `min` and `max` restrictions on numeric arguments"""
+    """Has `min` and `max` restrictions on numeric arguments"""
     rprint(f"[blue]X[/blue]: {x_int}, [green]Y[/green]: {y_int}")
     return x_int + y_int
 
