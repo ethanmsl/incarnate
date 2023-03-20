@@ -11,7 +11,8 @@ pub fn recursive_replace(dir: include_dir::Dir, pattern_val_pairs: &[(&str, &Str
                     .path()
                     .to_str()
                     .expect("unable to convert path to str")
-                    .replace(pattern_val_pairs[0].0, pattern_val_pairs[0].1);
+                    .replace(pattern_val_pairs[0].0, pattern_val_pairs[0].1)
+                    .replace("${{ python-skeleton }}", pattern_val_pairs[0].1);
                 // got into some opaque work regarding lifetime counting
                 // so leaveing this here for right now
 
