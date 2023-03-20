@@ -32,6 +32,8 @@ fn main() {
         .map(|&s| format!("${{ {} }}", s))
         .collect::<Vec<String>>();
 
+    // hydrating cli_app_name more than is typical
+    // allow for creating more optionality later
     let cli_app_name_hydrated = format!(
         "\n\n# declares name of CLI app and where the insertion point is\n[tool.poetry.scripts]\n{} = \"pkg_name.commands:app\"",
         &user_input.cli_app_name);
