@@ -3,12 +3,16 @@ Currently holding *de facto* `main()`
 Later may hold equivelnt commands for various purposes.
 """
 
+import time
 from importlib import metadata
+from typing import Optional
 
 import typer
-from colorama import Fore, Style
 from rich import print as rprint
+from rich.progress import Progress, SpinnerColumn, TextColumn, track
+from rich.prompt import Prompt
 
+from . import __name__ as APP_NAME
 
 # generage CLI app object
 app = typer.Typer(rich_markup_mode="rich", add_completion=False)
@@ -50,6 +54,49 @@ def app_options(
 # Regular 'ol Commands
 ##################################################################################
 
+
+@app.command(help="""Share your name -- get a fun fact.""")
+def what_am_i(name: Optional[str] = typer.Argument(None)) -> None:
+    """
+    Uses `Prompt.ask` to get user input.
+    Uses Rich-Print for output.
+    """
+    if name is None:
+        name_out: str = Prompt.ask("Enter your name, plz :sunglasses:")
+    else:
+        name_out: str = name
+
+    rprint(f"\nWhat, {name_out}, are you?")
+    # example of using rich-print's MarkUp
+    rprint(
+        f"[green]Why you are [bold red]loved[/bold red][/green] \
+[blue]{name_out}[/blue][green]![/green] :heart:"
+    )
+
+
+@app.command()
+def pword(
+    name: str = "user",
+    _: str = typer.Option(
+        ...,
+        "--hidden-input-string",
+        prompt=True,
+        confirmation_prompt=True,
+        hide_input=True,
+    ),
+    # NOTE: we would NOT want this as it allows explicit flag calling and regular
+    #       code inputing
+):
+    """Example use of \"hide_input\" true."""
+
+    rprint(
+        f"Hello [blue]{name}[/blue]. Doing something very secure :lock: with password."
+    )
+
+    #######################
+
+
+@app.command(rich_help_panel="Visual")
 @app.command("spin")
 def spinner_example(seconds: int = typer.Argument(5, min=1, max=36)) -> None:
     """Example of a progress bar"""
@@ -66,6 +113,7 @@ def spinner_example(seconds: int = typer.Argument(5, min=1, max=36)) -> None:
             progress.advance(task)
 
 
+@app.command(rich_help_panel="Visual")
 @app.command("progbar")
 def progress_bar_example(
     seconds: int = typer.Argument(5, min=1, max=16), plain_bar: bool = False
@@ -92,12 +140,36 @@ def progress_bar_example(
         rprint(f"Done sleeping for {total_so_far_2} seconds")
 
 
+##################################################################################
+# To Be Implemented
+##################################################################################
+
+
+@app.command(rich_help_panel="Yet To Be Implemented")
+def adding_tags() -> None:
+    """Example of using rich's prompt to add tags to a ticket"""
+    tags = []
+    while True:
+        tag = Prompt.ask("Enter a tag, or [bold red]q[/bold red] to quit")
+        if tag == "q":
+            break
+        tags.append(tag)
+    rprint(f"Tags: {tags}")
+
+
+@app.command(rich_help_panel="Yet To Be Implemented")
 @app.command("nums")
 def numeric_intake(
     x_int: int = typer.Argument(..., min=0, max=2),
     y_int: int = typer.Argument(..., min=-1, max=1),
 ) -> int:
     """testing `min` and `max` restrictions on numeric arguments"""
-    print(f"X: {x_int}, Y: {y_int}")
+    rprint(f"[blue]X[/blue]: {x_int}, [green]Y[/green]: {y_int}")
     return x_int + y_int
+
+
+@app.command(rich_help_panel="Yet To Be Implemented")
+def enable_all_extensions() -> None:
+    """Enable all extensions"""
+    rprint("[bold red]Not Implemented[/bold red]")
 
