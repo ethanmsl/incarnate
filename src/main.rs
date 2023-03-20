@@ -23,14 +23,6 @@ enum SubCommand {
 }
 
 fn main() {
-    // using `include_str!`
-    // and using `.replace`
-    let input = include_str!("../assets/example/main/main.txt");
-    let output = input.replace("${{name}}", "John Doe");
-    std::fs::write("output.txt", output).unwrap();
-
-    /////////////////////////////////
-
     let user_input = SomeStruct::interactive_parse().unwrap();
     println!("{:?}", user_input);
 
@@ -61,8 +53,31 @@ fn main() {
     println!("-------------");
     println!("Writing files to {:?}", user_input.arg);
     // copy PROJECT_DIR to a current directory
-    let path = format!("{}/", user_input.arg);
-    ASSETS_DIR.extract(path).unwrap();
+    let path = format!("parent/{}/", user_input.arg);
+
+    // ASSETS_DIR.extract(path).unwrap();
+    let newb = Dir::new(&path, ASSETS_DIR.entries());
+    println!("newb: {:?}", newb);
+    newb.extract("blaaaap").unwrap();
+
+    recursive_replace(newb, &user_input.arg);
+}
+
+fn recursive_replace(dir: Dir, name: &str) {
+    for entry in dir.entries() {
+        match entry {
+            include_dir::DirEntry::File(file) => {
+                let input = file.contents_utf8().unwrap();
+                let output = input.replace("${{ name }}", name);
+                println!("Writing file to {:?}", file.path());
+                std::fs::create_dir_all(file.path().parent().unwrap()).unwrap();
+                std::fs::write(file.path(), output).unwrap();
+            }
+            include_dir::DirEntry::Dir(dir) => {
+                recursive_replace(dir.clone(), name);
+            }
+        }
+    }
 }
 
 fn recursive_print(dir: Dir) {
