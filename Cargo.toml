@@ -3,7 +3,7 @@ name = "incarnate"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-inquire = "0.6.0"
+clap = { version = "4.1.11", features = ["derive"] }
+clap-interactive = "0.2.1"
+include_dir = "0.7.3"
