@@ -32,12 +32,6 @@ fn main() {
         .map(|&s| format!("${{ {} }}", s))
         .collect::<Vec<String>>();
 
-    // hydrating cli_app_name more than is typical
-    // allow for creating more optionality later
-    let cli_app_name_hydrated = format!(
-        "\n\n# declares name of CLI app and where the insertion point is\n[tool.poetry.scripts]\n{} = \"pkg_name.commands:app\"",
-        &user_input.cli_app_name);
-
     // no way to guaranteed that macro derived struct name ordering and
     // struct field iteration match
     // forces manual entry
@@ -45,7 +39,7 @@ fn main() {
         ("${{ carnate.project_name }}", &user_input.project_name),
         ("${{ carnate.author_name }}", &user_input.author_name),
         ("${{ carnate.no_reply_email }}", &user_input.no_reply_email),
-        ("${{ carnate.cli_app_name }}", &cli_app_name_hydrated),
+        ("${{ carnate.cli_app_name }}", &user_input.cli_app_name),
         (
             "${{ carnate.test_coverage_min }}",
             &user_input.test_coverage_min.to_string(),
