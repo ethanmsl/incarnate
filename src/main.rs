@@ -9,7 +9,7 @@
 #![allow(clippy::uninlined_format_args)]
 use clap::Parser;
 use clap_interactive::*;
-use incarnate::template_populator;
+use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use struct_field_names_as_array::FieldNamesAsArray;
 
@@ -55,4 +55,5 @@ fn main() {
     let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
 
     template_populator::recursive_replace(new_dir_copy, &replacement_pairs);
+    shell_actions::git_init();
 }
