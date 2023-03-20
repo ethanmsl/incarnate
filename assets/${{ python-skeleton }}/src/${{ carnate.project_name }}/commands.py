@@ -55,12 +55,9 @@ def app_options(
 ##################################################################################
 
 
-@app.command(help="""Share your name -- get a fun fact.""")
+@app.command(rich_help_panel="Prompted")
 def what_am_i(name: Optional[str] = typer.Argument(None)) -> None:
-    """
-    Uses `Prompt.ask` to get user input.
-    Uses Rich-Print for output.
-    """
+    """Share your name -- get a fun fact."""
     if name is None:
         name_out: str = Prompt.ask("Enter your name, plz :sunglasses:")
     else:
@@ -74,6 +71,7 @@ def what_am_i(name: Optional[str] = typer.Argument(None)) -> None:
     )
 
 
+@app.command(rich_help_panel="Prompted")
 @app.command()
 def pword(
     name: str = "user",
@@ -92,6 +90,17 @@ def pword(
     rprint(
         f"Hello [blue]{name}[/blue]. Doing something very secure :lock: with password."
     )
+
+@app.command(rich_help_panel="Prompted")
+def adding_tags() -> None:
+    """Example of using rich's prompt to add tags to a ticket"""
+    tags = []
+    while True:
+        tag = Prompt.ask("Enter a tag, or [bold red]q[/bold red] to quit")
+        if tag == "q":
+            break
+        tags.append(tag)
+    rprint(f"Tags: {tags}")
 
 ##################################################################################
 # Visual Widgets
@@ -114,16 +123,12 @@ def spin(seconds: int = typer.Argument(5, min=1, max=36)) -> None:
             progress.advance(task)
 
 
-@app.command(help="""A progress bar set to your task.""")
 @app.command(rich_help_panel="Visual")
 def progbar(
     seconds: int = typer.Argument(5, min=1, max=16), plain_bar: bool = False
 ) -> None:
     """
-    Example of a progress bar.
-    Default uses Rich. (colorful, but simple)
-    Use `--plain-bar` to use Typer's progress bar.
-    Which actually has a very nice, minimalist ascii aesthetic.
+    A progress bar set to your task.
     """
 
     if not plain_bar:
@@ -142,23 +147,11 @@ def progbar(
 
 
 ##################################################################################
-# To Be Implemented
+# Additional Validations
 ##################################################################################
 
 
-@app.command(rich_help_panel="Yet To Be Implemented")
-def adding_tags() -> None:
-    """Example of using rich's prompt to add tags to a ticket"""
-    tags = []
-    while True:
-        tag = Prompt.ask("Enter a tag, or [bold red]q[/bold red] to quit")
-        if tag == "q":
-            break
-        tags.append(tag)
-    rprint(f"Tags: {tags}")
-
-
-@app.command(rich_help_panel="Yet To Be Implemented")
+@app.command(rich_help_panel="Additional Validations")
 def numeric_intake(
     x_int: int = typer.Argument(..., min=0, max=2),
     y_int: int = typer.Argument(..., min=-1, max=1),
@@ -166,10 +159,3 @@ def numeric_intake(
     """Has `min` and `max` restrictions on numeric arguments"""
     rprint(f"[blue]X[/blue]: {x_int}, [green]Y[/green]: {y_int}")
     return x_int + y_int
-
-
-@app.command(rich_help_panel="Yet To Be Implemented")
-def enable_all_extensions() -> None:
-    """Enable all extensions"""
-    rprint("[bold red]Not Implemented[/bold red]")
-
