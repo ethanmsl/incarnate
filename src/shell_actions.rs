@@ -23,7 +23,10 @@ fn git_init(path: &Path) -> io::Result<()> {
 
     let mut git_cmd = Command::new("git");
     git_cmd.arg("init");
-    git_cmd.current_dir(abs_path_proj).output().unwrap();
+    git_cmd
+        .current_dir(abs_path_proj)
+        .output()
+        .expect("Failed to run git init");
     Ok(())
 }
 
@@ -34,7 +37,10 @@ fn git_add_all(path: &Path) -> io::Result<()> {
 
     let mut git_cmd = Command::new("git");
     git_cmd.arg("add").arg(".");
-    git_cmd.current_dir(abs_path_proj).output().unwrap();
+    git_cmd
+        .current_dir(abs_path_proj)
+        .output()
+        .expect("Failed to run git add .");
     Ok(())
 }
 
@@ -45,7 +51,10 @@ fn git_initial_commit(path: &Path) -> io::Result<()> {
 
     let mut git_cmd = Command::new("git");
     git_cmd.arg("commit").arg("--message").arg("Initial commit");
-    git_cmd.current_dir(abs_path_proj).output().unwrap();
+    git_cmd
+        .current_dir(abs_path_proj)
+        .output()
+        .expect("Failed to run git commit");
     Ok(())
 }
 
@@ -59,11 +68,14 @@ fn move_pre_commit_hook(path: &Path) -> io::Result<()> {
     chmod_cmd
         .current_dir(abs_path_proj.clone())
         .output()
-        .unwrap();
+        .expect("Failed to run chmod +x pre-commit");
 
     let mut mv_cmd = Command::new("mv");
     mv_cmd.arg("pre-commit").arg(".git/hooks/pre-commit");
-    mv_cmd.current_dir(abs_path_proj).output().unwrap();
+    mv_cmd
+        .current_dir(abs_path_proj)
+        .output()
+        .expect("Failed to run mv pre-commit .git/hooks/pre-commit");
     Ok(())
 }
 
