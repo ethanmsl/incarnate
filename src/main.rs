@@ -1,24 +1,34 @@
-use inquire::{validator::Validation, Text};
+//! demo from front page of [clap-interactive](https://lib.rs/crates/clap-interactive)
+#![allow(clippy::uninlined_format_args)]
+use clap::Parser;
+use clap_interactive::*;
+use include_dir::{include_dir, Dir};
+
+static PROJECT_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct SomeStruct {
+    #[command(subcommand)]
+    subcommand: SubCommand,
+    arg: String,
+}
+
+#[derive(Parser, Debug)]
+#[clap(rename_all = "snake_case", infer_subcommands = true)]
+enum SubCommand {
+    Commit { message: String },
+    Clone { address: String },
+    Boogita { num: u32 },
+}
 
 fn main() {
-    let _num = 12 + 2;
+    let git = SomeStruct::interactive_parse().unwrap();
+    println!("{:?}", git);
 
-    let validator = |input: &str| {
-        if input.chars().count() > 140 {
-            Ok(Validation::Invalid(
-                "You're only allowed 140 characters.".into(),
-            ))
-        } else {
-            Ok(Validation::Valid)
-        }
-    };
+    // // of course, you can retrieve a file by its full path
+    // let asst_tree = PROJECT_DIR.get_file("assets/").unwrap();
 
-    let status = Text::new("What are you thinking about?")
-        .with_validator(validator)
-        .prompt();
-
-    match status {
-        Ok(_status) => println!("Your status is being published..."),
-        Err(err) => println!("Error while publishing your status: {}", err),
-    }
+    // copy PROJECT_DIR to a current directory
+    PROJECT_DIR.extract("created-assets/").unwrap();
 }
