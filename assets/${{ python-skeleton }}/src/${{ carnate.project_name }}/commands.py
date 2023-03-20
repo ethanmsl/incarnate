@@ -93,12 +93,14 @@ def pword(
         f"Hello [blue]{name}[/blue]. Doing something very secure :lock: with password."
     )
 
-    #######################
+##################################################################################
+# Visual Widgets
+##################################################################################
 
 
 @app.command(rich_help_panel="Visual")
 def spin(seconds: int = typer.Argument(5, min=1, max=36)) -> None:
-    """Example of a progress bar"""
+    """Spinners for the unknowably long and asynchronous."""
 
     with Progress(
         SpinnerColumn(),
@@ -112,6 +114,7 @@ def spin(seconds: int = typer.Argument(5, min=1, max=36)) -> None:
             progress.advance(task)
 
 
+@app.command(help="""A progress bar set to your task.""")
 @app.command(rich_help_panel="Visual")
 def progbar(
     seconds: int = typer.Argument(5, min=1, max=16), plain_bar: bool = False
