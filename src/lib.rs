@@ -7,7 +7,13 @@ pub fn recursive_replace(dir: include_dir::Dir, pattern_val_pairs: &[(&str, &Str
                 let hydrated_string = replace_file_contents(file, pattern_val_pairs)
                     .expect("unable to find utf8 file contents");
 
-                write_file(file.path(), hydrated_string);
+                let pathstring = file
+                    .path()
+                    .to_str()
+                    .expect("unable to convert path to str")
+                    .replace(pattern_val_pairs[0].0, pattern_val_pairs[0].1);
+                let path = Path::new(&pathstring);
+                write_file(path, hydrated_string);
             }
             include_dir::DirEntry::Dir(dir) => {
                 recursive_replace(dir.clone(), pattern_val_pairs);
