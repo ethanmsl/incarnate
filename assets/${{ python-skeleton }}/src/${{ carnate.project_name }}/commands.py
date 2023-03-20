@@ -1,6 +1,7 @@
 """
-Currently holding *de facto* `main()`
-Later may hold equivelnt commands for various purposes.
+*De facto* `main`, holding the key functions acting as entry points
+to any other code and acting as the bridge to the user via
+the typer framework and decorators.
 """
 
 import time
