@@ -1,0 +1,6 @@
+# See 'GitHub Linguist Overrides' for more information
+# https://github.com/github/linguist/blob/master/docs/overrides.md
+
+# prevent 'assets' content from being counted as wrong lang. in repo statistics
+assets/** linguist-language=python
+
