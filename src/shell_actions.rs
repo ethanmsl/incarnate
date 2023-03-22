@@ -9,6 +9,7 @@ use std::io;
 use std::path::Path;
 use std::process::Command;
 
+/// runs a series of shell commands to initialize a git repo
 pub fn git_setup(path: &Path) -> io::Result<()> {
     git_init(path)?;
     move_pre_commit_hook(path)?;
@@ -17,6 +18,7 @@ pub fn git_setup(path: &Path) -> io::Result<()> {
     Ok(())
 }
 
+/// runs `git init` in a given directory
 fn git_init(path: &Path) -> io::Result<()> {
     let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
@@ -31,6 +33,7 @@ fn git_init(path: &Path) -> io::Result<()> {
     Ok(())
 }
 
+/// runs `git add .` in a given directory
 fn git_add_all(path: &Path) -> io::Result<()> {
     let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
@@ -45,6 +48,8 @@ fn git_add_all(path: &Path) -> io::Result<()> {
     Ok(())
 }
 
+/// runs a commit with "initial commit" in a given directory
+/// ignores git hooks
 fn git_initial_commit(path: &Path) -> io::Result<()> {
     let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
@@ -63,6 +68,9 @@ fn git_initial_commit(path: &Path) -> io::Result<()> {
     Ok(())
 }
 
+/// makes executable and moves a pre-commit hook
+/// by original intention from the root of a created project directory to
+/// the `.git/hooks` dir of a recently created git instance
 fn move_pre_commit_hook(path: &Path) -> io::Result<()> {
     let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
@@ -84,6 +92,7 @@ fn move_pre_commit_hook(path: &Path) -> io::Result<()> {
     Ok(())
 }
 
+/// gets workind directory and returns as a `String`
 fn get_current_working_dir() -> String {
     let res = env::current_dir();
     match res {
