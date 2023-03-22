@@ -1,8 +1,9 @@
-/// Collection of actions that use the shell directly.
-///
-/// # Examples
-/// - the `pre-commit` hook is created as a non-executable file
-/// - running `git init` helps ensure users normal git settings are respected
+//! Collection of actions that use the shell directly.
+//!
+//! # Examples
+//! - the `pre-commit` hook is created as a non-executable file
+//! - running `git init` helps ensure users normal git settings are respected
+
 use std::env;
 use std::io;
 use std::path::Path;

@@ -1,6 +1,7 @@
-///
-/// Core element that recursively navigates templated assets and replaces variables
-/// of the form `${{ carnate.____ }}`
+//!
+//! Core element that recursively navigates templated assets and replaces variables
+//! of the form `${{ carnate.____ }}`
+
 use std::path::Path;
 
 /// works through a nested Enum or corresponding Dir & File value
