@@ -1,21 +1,19 @@
-# Python Skeleton Repo
-This is an *exploratory* skeleton repo for Python projects using both Poetry and either/both CircleCI or GitHub_Actions.
-the `pyproject.toml` is pre-loaded with dev dependenceis used in the supplied pre-commit hook and CircleCI tests.
+# ${{ carnate.project_name }}
+
+## CircleCI Test Status Badge
+To activate:
+- In CircleCI go to `Project Settings > Status Badges`
+- Click `Add API Token` button
+- Click the `Copy` button under `Embed Code` and paste in this README.md file. :)
 
 
-## CircleCI Badge
-Add CircleCI Passing/Failing Badge: [link to docs](https://circleci.com/docs/status-badges/?utm_source=google&utm_medium=sem&utm_campaign=sem-google-dg--uscan-en-dsa-maxConv-auth-brand&utm_term=g_-_c__dsa_&utm_content=&gclid=Cj0KCQiAz9ieBhCIARIsACB0oGLRozHy2fiAiThYNATH7_Nw_i_2fv1oTzfkBexHpv7gn9zhKzPm_KYaAt-EEALw_wcB)   
-(You will also likely find an easy insertion in the CircleCI section related to the repo.)
+## Auto-Documentation Link
+To activate:
+- In GitHub repo go to `settings > pages` Under `Build and deployment` set `Source` to **GitHub Actions**.
+- Run the GitHub Action *or* make any commit to repository
+- A new page will be created. Yay!
+    - You can place that address in the above link for easy reader navigation.
 
-```markdown
-[![<ORG_NAME>](https://circleci.com/<VCS>/<ORG_NAME>/<PROJECT_NAME>.svg?style=svg)](<LINK>)
-```
-
-## GitHub Actions Badge
-Add a GitHub Actions Passing/Failing Badge: [link to docs](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge)
-```markdown
-![hidden words](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/<WORKFLOW_FILE>/badge.svg)
-```
 
 ## Dev-Dependencies Specified
 - formatting: `isort` & `black`
@@ -28,7 +26,6 @@ Add a GitHub Actions Passing/Failing Badge: [link to docs](https://docs.github.c
 ## Run Pre-Commit Hook Manually
 from anywhere in project:
 ```zsh
+poetry shell
 git hook run pre-commit
 ```
-
-**Note**: the `pre-commit` file needs to be placed in the `.git/hooks/` directory.
