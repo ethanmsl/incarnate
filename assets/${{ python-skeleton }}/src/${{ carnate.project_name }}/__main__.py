@@ -13,4 +13,3 @@ from .commands import app
 #                                      Execution
 app()  # Typer (CLI framework) object
 ########################################################################################
-

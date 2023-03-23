@@ -13,9 +13,10 @@ def test_what_am_i() -> None:
     assert commands.numeric_intake(2, 0) == 2
     assert commands.numeric_intake(1, 1) == 2
 
+
 def test_version_callback():
     """
-    test error and non-error exit
+    Test error and non-error exit
     """
     assert commands.version_callback(False) is None
     with pytest.raises(SystemExit):

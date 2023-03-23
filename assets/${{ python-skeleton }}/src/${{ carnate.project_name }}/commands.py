@@ -51,6 +51,7 @@ def app_options(
     `--version`, but it does seem to be the best way to do it in this framework.)
     """
 
+
 ##################################################################################
 # Regular 'ol Commands
 ##################################################################################
@@ -73,7 +74,6 @@ def what_am_i(name: Optional[str] = typer.Argument(None)) -> None:
 
 
 @app.command(rich_help_panel="Prompted")
-@app.command()
 def pword(
     name: str = "user",
     _: str = typer.Option(
@@ -92,6 +92,7 @@ def pword(
         f"Hello [blue]{name}[/blue]. Doing something very secure :lock: with password."
     )
 
+
 @app.command(rich_help_panel="Prompted")
 def adding_tags() -> None:
     """Example of using rich's prompt to add tags to a ticket"""
@@ -102,6 +103,7 @@ def adding_tags() -> None:
             break
         tags.append(tag)
     rprint(f"Tags: {tags}")
+
 
 ##################################################################################
 # Visual Widgets
