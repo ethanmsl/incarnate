@@ -2,6 +2,8 @@
 Unit Tests for `commands.py`
 """
 
+import pytest
+
 from ${{ carnate.project_name }} import commands
 
 
@@ -16,4 +18,5 @@ def test_version_callback():
     test error and non-error exit
     """
     assert commands.version_callback(False) is None
-
+    with pytest.raises(SystemExit):
+        commands.version_callback(True)
