@@ -1,0 +1,3 @@
+[submodule "assets/${{ carnate.python-skeleton }}"]
+	path = assets/${{ carnate.python-skeleton }}
+	url = https://github.com/ethanmsl/python_cli_app_template
