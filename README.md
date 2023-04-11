@@ -1,5 +1,5 @@
 # What is this, User-wise?
-This is effectively an API access to a Skeleton Repo.
+This is effectively an API for a Skeleton Repo.
 Instead of manually filling in the details of the skeleton repo in order to flesh it out and make it usable, you can just call this app answer its prompts and it will create a fleshed out repo for you, initialize git, place a pre-commit hook (appropriate to the CI/CD code in-repo), and do an initial commit.
 
 So you can just type a few words and have a fully functioning set-up.  Complete with local CI/CD and with scripts to almost instantly hook in remote CI/CD.  (Just upload the repo and the rest should be done for you; assuming reasonable things about your remote set-up.)
