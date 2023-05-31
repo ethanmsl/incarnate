@@ -34,8 +34,7 @@ fn main() {
         .map(|&s| format!("${{ {} }}", s))
         .collect::<Vec<String>>();
 
-    // no way to guaranteed that macro derived struct name ordering and
-    // struct field iteration match
+    // no way to guarantee  macro derived struct name ordering and field iteration match
     // forces manual entry
     let replacement_pairs = [
         ("${{ carnate.project_name }}", &user_input.project_name),
