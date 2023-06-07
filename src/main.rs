@@ -13,6 +13,8 @@ use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use std::path::Path;
 use struct_field_names_as_array::FieldNamesAsArray;
+use tracing::info;
+use tracing_subscriber;
 
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
@@ -28,11 +30,21 @@ struct SomeStruct {
 }
 
 fn main() {
+    // install global collector configured based on RUST_LOG env var.
+    tracing_subscriber::fmt::init();
+
+
     let user_input = SomeStruct::interactive_parse().expect("unable to parse user input");
+    info!(user_input = ?user_input, "User input received:");
+
     let _replacement_tokens = SomeStruct::FIELD_NAMES_AS_ARRAY
         .iter()
         .map(|&s| format!("${{ {} }}", s))
         .collect::<Vec<String>>();
+    info!(
+        _replacement_tokens = ?_replacement_tokens,
+        "Field names rendered as array (NOTE: unused)"
+    );
 
     // no way to guarantee macro derived struct name ordering and field iteration match
     // forces manual entry
