@@ -30,11 +30,12 @@ struct SomeStruct {
 }
 
 fn main() {
-    // install global collector configured based on RUST_LOG env var.
+    // install global collector configured based on `RUST_LOG` env var.
+    //     `RUST_LOG=info cargo run`
+    //     `RUST_LOG ∊ {trace,debug,info,warn,error}`
     tracing_subscriber::fmt::init();
 
     let user_input = SomeStruct::interactive_parse().expect("unable to parse user input");
-
     tracing::info!(user_input = ?user_input, "User input received:");
 
     let _replacement_tokens = SomeStruct::FIELD_NAMES_AS_ARRAY
