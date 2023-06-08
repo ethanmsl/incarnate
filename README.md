@@ -1,3 +1,6 @@
+( **Dev Use Note**: this uses a git submodule for the template assets, be sure to initialize and update if workig on repo)
+
+
 # What is this, User-wise?
 This is effectively an API for a Skeleton Repo.
 Instead of manually filling in the details of the skeleton repo in order to flesh it out and make it usable, you can just call this app answer its prompts and it will create a fleshed out repo for you, initialize git, place a pre-commit hook (appropriate to the CI/CD code in-repo), and do an initial commit.
