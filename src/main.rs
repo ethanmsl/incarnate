@@ -58,6 +58,7 @@ fn main() {
             &user_input.test_coverage_min.to_string(),
         ),
     ];
+    tracing::info!(replacement_pairs = ?replacement_pairs, "Template Field:Value Pairs:");
 
     println!("-------------");
     println!("Writing files to {:?}", user_input.project_name);
@@ -65,8 +66,13 @@ fn main() {
     // NOTE: this can probably be removed on refactor with proper referencing of `ASSETS_DIR`
     let path = format!("parent/{}/", user_input.project_name);
     let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
+    tracing::info!(path = ?path,"New directory created at: ");
+    tracing::trace!(new_dir_copy = ?new_dir_copy, "Newly created directory:");
 
     template_populator::recursive_replace(new_dir_copy, &replacement_pairs);
     let proj_relative_path = Path::new(&user_input.project_name);
+    tracing::debug!(proj_relative_path = ?proj_relative_path,"Passing project path to shell actions:");
     shell_actions::git_setup(proj_relative_path).expect("Failed to perform git repo setup");
+
+    tracing::info!("Incarnate script complete.");
 }
