@@ -6,7 +6,6 @@
 //!     presently I'm just deleting them
 //!     ```find . -name ".DS_Store" -delete```
 
-#![allow(clippy::uninlined_format_args)]
 use clap::Parser;
 use clap_interactive::*;
 use incarnate::{shell_actions, template_populator};
