@@ -14,6 +14,8 @@ use std::path::Path;
 use struct_field_names_as_array::FieldNamesAsArray;
 use tracing::{debug, info, trace};
 
+// TODO: add checks for extant directory 
+//       AND check/warning re: git-submodule initialization
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 #[derive(Parser, Debug)]
@@ -66,6 +68,8 @@ fn main() {
     // NOTE: this can probably be removed on refactor with proper referencing of `ASSETS_DIR`
     let path = format!("parent/{}/", user_input.project_name);
     debug!(path = ?path,"Path passed in for new directory location: ");
+    // TODO: add checks for ASSETS_DIR.entries() values as valid & directory creation
+    // NOTE: ASSETS_DIR is a git-submodule, needs local init & update in fresh repo
     let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
     trace!(new_dir_copy = ?new_dir_copy, "Newly created directory:");
 
