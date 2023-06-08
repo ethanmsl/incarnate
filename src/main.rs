@@ -10,7 +10,6 @@ use clap::Parser;
 use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use std::path::Path;
-use struct_field_names_as_array::FieldNamesAsArray;
 use tracing::{debug, info, trace};
 
 // TODO: add checks for extant directory
@@ -19,7 +18,6 @@ static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
-#[derive(FieldNamesAsArray)]
 struct TemplateFields {
     project_name: String,
     author_name: String,
@@ -38,17 +36,6 @@ fn main() {
     let user_input = TemplateFields::parse();
     info!(user_input = ?user_input, "User input received:");
 
-    let _replacement_tokens = TemplateFields::FIELD_NAMES_AS_ARRAY
-        .iter()
-        .map(|&s| format!("${{ {} }}", s))
-        .collect::<Vec<String>>();
-    trace!(
-        _replacement_tokens = ?_replacement_tokens,
-        "Field names rendered as array (NOTE: unused)"
-    );
-
-    // no way to guarantee macro derived struct name ordering and field iteration match
-    // forces manual entry
     let replacement_pairs = [
         ("${{ carnate.project_name }}", &user_input.project_name),
         ("${{ carnate.author_name }}", &user_input.author_name),
