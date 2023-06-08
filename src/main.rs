@@ -7,19 +7,18 @@
 //!     ```find . -name ".DS_Store" -delete```
 
 use clap::Parser;
-use clap_interactive::*;
 use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use std::path::Path;
 use struct_field_names_as_array::FieldNamesAsArray;
 use tracing::{debug, info, trace};
 
-// TODO: add checks for extant directory 
+// TODO: add checks for extant directory
 //       AND check/warning re: git-submodule initialization
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[clap(author, version, about, long_about = None)]
 #[derive(FieldNamesAsArray)]
 struct SomeStruct {
     project_name: String,
@@ -36,7 +35,7 @@ fn main() {
     //  NOTE: `tracing-log` feature enabled, should be able to consume `log` events
     tracing_subscriber::fmt::init();
 
-    let user_input = SomeStruct::interactive_parse().expect("unable to parse user input");
+    let user_input = SomeStruct::parse();
     info!(user_input = ?user_input, "User input received:");
 
     let _replacement_tokens = SomeStruct::FIELD_NAMES_AS_ARRAY
