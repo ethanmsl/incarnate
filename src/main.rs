@@ -13,8 +13,6 @@ use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use std::path::Path;
 use struct_field_names_as_array::FieldNamesAsArray;
-use tracing;
-use tracing_subscriber;
 
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
@@ -33,6 +31,7 @@ fn main() {
     // install global collector configured based on `RUST_LOG` env var.
     //     `RUST_LOG=info cargo run`
     //     `RUST_LOG ∊ {trace,debug,info,warn,error}`
+    //  NOTE: `tracing-log` feature enabled, should be able to consume `log` events
     tracing_subscriber::fmt::init();
 
     let user_input = SomeStruct::interactive_parse().expect("unable to parse user input");
