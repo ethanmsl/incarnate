@@ -13,6 +13,7 @@ use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use std::path::Path;
 use struct_field_names_as_array::FieldNamesAsArray;
+use tracing::{debug, info, trace};
 
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
@@ -35,13 +36,13 @@ fn main() {
     tracing_subscriber::fmt::init();
 
     let user_input = SomeStruct::interactive_parse().expect("unable to parse user input");
-    tracing::info!(user_input = ?user_input, "User input received:");
+    info!(user_input = ?user_input, "User input received:");
 
     let _replacement_tokens = SomeStruct::FIELD_NAMES_AS_ARRAY
         .iter()
         .map(|&s| format!("${{ {} }}", s))
         .collect::<Vec<String>>();
-    tracing::trace!(
+    trace!(
         _replacement_tokens = ?_replacement_tokens,
         "Field names rendered as array (NOTE: unused)"
     );
@@ -58,7 +59,7 @@ fn main() {
             &user_input.test_coverage_min.to_string(),
         ),
     ];
-    tracing::info!(replacement_pairs = ?replacement_pairs, "Template Field:Value Pairs:");
+    info!(replacement_pairs = ?replacement_pairs, "Template Field:Value Pairs:");
 
     println!("-------------");
     println!("Writing files to {:?}", user_input.project_name);
@@ -66,13 +67,13 @@ fn main() {
     // NOTE: this can probably be removed on refactor with proper referencing of `ASSETS_DIR`
     let path = format!("parent/{}/", user_input.project_name);
     let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
-    tracing::info!(path = ?path,"New directory created at: ");
-    tracing::trace!(new_dir_copy = ?new_dir_copy, "Newly created directory:");
+    info!(path = ?path,"New directory created at: ");
+    trace!(new_dir_copy = ?new_dir_copy, "Newly created directory:");
 
     template_populator::recursive_replace(new_dir_copy, &replacement_pairs);
     let proj_relative_path = Path::new(&user_input.project_name);
-    tracing::debug!(proj_relative_path = ?proj_relative_path,"Passing project path to shell actions:");
+    debug!(proj_relative_path = ?proj_relative_path,"Passing project path to shell actions:");
     shell_actions::git_setup(proj_relative_path).expect("Failed to perform git repo setup");
 
-    tracing::info!("Incarnate script complete.");
+    info!("Incarnate script complete.");
 }
