@@ -8,6 +8,7 @@ use std::env;
 use std::io;
 use std::path::Path;
 use std::process::Command;
+use tracing::debug;
 
 /// runs a series of shell commands to initialize a git repo
 pub fn git_setup(path: &Path) -> io::Result<()> {
@@ -23,6 +24,7 @@ fn git_init(path: &Path) -> io::Result<()> {
     let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
     let abs_path_proj = cwd + "/" + pathstring;
+    debug!( abs_path_proj = ?abs_path_proj, "git_init");
 
     let mut git_cmd = Command::new("git");
     git_cmd.arg("init");
@@ -38,6 +40,7 @@ fn git_add_all(path: &Path) -> io::Result<()> {
     let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
     let abs_path_proj = cwd + "/" + pathstring;
+    debug!(abs_path_proj = ?abs_path_proj,"git_add_all");
 
     let mut git_cmd = Command::new("git");
     git_cmd.arg("add").arg(".");
@@ -54,6 +57,7 @@ fn git_initial_commit(path: &Path) -> io::Result<()> {
     let pathstring = path.to_str().expect("Failed to convert path to string");
     let cwd = get_current_working_dir();
     let abs_path_proj = cwd + "/" + pathstring;
+    debug!(abs_path_proj = ?abs_path_proj,"git_initial_commit");
 
     let mut git_cmd = Command::new("git");
     git_cmd
