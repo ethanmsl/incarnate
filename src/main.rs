@@ -20,9 +20,13 @@ static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 #[clap(author, version, about)] // from: `authors`, `version`, `about`
 struct InputStruct {
     project_name: String,
+    cli_app_name: Option<String>,
+
+    #[clap(short='a', long="author", default_value_t = String::from("author_name_not_supplied"))]
     author_name: String,
+    #[clap(short='e', long="email", default_value_t = String::from("email_not_supplied"))]
     no_reply_email: String,
-    cli_app_name: String,
+    #[clap(short = 'c', long = "coverage_minimum", default_value_t = 80)]
     test_coverage_min: u8,
 }
 
@@ -40,7 +44,12 @@ fn main() {
         ("${{ carnate.project_name }}", &user_input.project_name),
         ("${{ carnate.author_name }}", &user_input.author_name),
         ("${{ carnate.no_reply_email }}", &user_input.no_reply_email),
-        ("${{ carnate.cli_app_name }}", &user_input.cli_app_name),
+        (
+            "${{ carnate.cli_app_name }}",
+            &user_input
+                .cli_app_name
+                .unwrap_or(user_input.project_name.clone()),
+        ),
         (
             "${{ carnate.test_coverage_min }}",
             &user_input.test_coverage_min.to_string(),
