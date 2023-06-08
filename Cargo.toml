@@ -1,7 +1,16 @@
 [package]
 name = "incarnate"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
+authors = [ "Ethan Skowronski-Lutz <33399972+ethanmsl@users.noreply.github.com>" ]
+categories = [ "cli", "utility", "app", "repo_generation", "template" ]
+description = "A CLI tool for generating a repository from a template."
+documentation = ""
+readme = "README.md"
+homepage = ""
+repository = ""
+license = ""
+default-run = "incarnate"
 
 [dependencies]
 clap = { version = "3.2.23", features = ["derive"] }

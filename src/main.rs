@@ -17,8 +17,8 @@ use tracing::{debug, info, trace};
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 #[derive(Parser, Debug)]
-#[clap(author, version, about, long_about = None)]
-struct TemplateFields {
+#[clap(author, version, about)] // from: `authors`, `version`, `about`
+struct TemplateStruct {
     project_name: String,
     author_name: String,
     no_reply_email: String,
