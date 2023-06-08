@@ -65,8 +65,8 @@ fn main() {
     // copy PROJECT_DIR to a current directory
     // NOTE: this can probably be removed on refactor with proper referencing of `ASSETS_DIR`
     let path = format!("parent/{}/", user_input.project_name);
+    debug!(path = ?path,"Path passed in for new directory location: ");
     let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
-    info!(path = ?path,"New directory created at: ");
     trace!(new_dir_copy = ?new_dir_copy, "Newly created directory:");
 
     template_populator::recursive_replace(new_dir_copy, &replacement_pairs);
