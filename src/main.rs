@@ -18,7 +18,7 @@ static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about)] // from: `authors`, `version`, `about`
-struct TemplateStruct {
+struct InputStruct {
     project_name: String,
     author_name: String,
     no_reply_email: String,
@@ -33,7 +33,7 @@ fn main() {
     //  NOTE: `tracing-log` feature enabled, should be able to consume `log` events
     tracing_subscriber::fmt::init();
 
-    let user_input = TemplateFields::parse();
+    let user_input = InputStruct::parse();
     info!(user_input = ?user_input, "User input received:");
 
     let replacement_pairs = [
