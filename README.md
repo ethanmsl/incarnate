@@ -1,12 +1,3 @@
-# Update (XII-'23):
-
-This was a great early Rust project for me and it's served dutifully (and does still) - Making customized repo creation and thus fast exploration easier. But more featureful, more actively maintained, and more flexible tools exist!
-
-- For **Rust** projects: [Cargo-Generate](<[url](https://github.com/cargo-generate/cargo-generate)>) is something I've been using and adore. You can point it to local or remote templates. It is intimately connected to Cargo however, and is not suitable for projects not connected to a crate at all. It's also not intended to help newer coders set-up and does not do any initial git automation or hook-up.
-- For **Python** projects: I have not yet used but will be exploring [CookieCutter](https://github.com/cookiecutter/cookiecutter). (Several similar alternatives also exist.) More widespread use. Also allows pointing at remote templates. Does not do initial git automation or hook-up, but if we need that for someone we can just as easily include what's needed in a justfile and that offers a more customizable solution.
-
----
-
 ( **Dev Use Note**: this uses a git submodule for the template assets, be sure to initialize and update if workig on repo)
 
 # What is this, User-wise?
