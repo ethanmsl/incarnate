@@ -1,4 +1,4 @@
-( **Dev Use Note**: this uses a git submodule for the template assets, be sure to initialize and update if workig on repo)
+( **Dev Use Note**: this uses a git submodule for the template assets, be sure to initialize and update if working on repo)
 
 # What is this, User-wise?
 
@@ -56,3 +56,7 @@ xattr -d com.apple.quarantine $ISHALLBERUN
 chmod +x $ISHALLBERUN
 sudo cp $ISHALLBERUN /usr/local/bin/incarnate
 ```
+
+## Cloning Note
+
+This repo uses [git-submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to store templates. The short version: after cloning run `git submodule init` and `git submodule update`. And run the latter command to update with the submodule repo(s).
