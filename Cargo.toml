@@ -1,9 +1,9 @@
 [package]
 name = "incarnate"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
-authors = [ "Ethan Skowronski-Lutz <33399972+ethanmsl@users.noreply.github.com>" ]
-categories = [ "cli", "utility", "app", "repo_generation", "template" ]
+authors = ["Ethan Skowronski-Lutz <33399972+ethanmsl@users.noreply.github.com>"]
+categories = ["cli", "utility", "app", "repo_generation", "template"]
 description = "A CLI tool for generating a repository from a template."
 documentation = ""
 readme = "README.md"
