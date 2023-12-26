@@ -11,6 +11,7 @@ _default:
 git-submodules:
         git submodule init
         git submodule update
+        git submodule foreach git pull origin master
 
 # Build a release version for specific architectures.
 build ARCH="aarch64-apple-darwin":
