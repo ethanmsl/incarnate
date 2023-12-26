@@ -37,13 +37,12 @@ brew-bump:
         brew bump {{FILE}}
         brew info {{FILE}}
 
-# Open (in web browser) the releases page for the repo
-open-releases:
-        https://github.com/ethanmsl/{{FILE}}/releases
-
-# Open (in web browser) the repo containing the Homebrew formula
-open-formula-repo:
+# Open Releases Page, Ruby Formula Page, and local release directory.
+open-pages ARCH="aarch64-apple-darwin":
+        open ./target/{{ARCH}}/release
+        open https://github.com/ethanmsl/{{FILE}}/releases
         open https://github.com/ethanmsl/homebrew-{{FILE}}
+
 
 
 
