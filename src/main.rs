@@ -7,17 +7,16 @@
 //!     ```find . -name ".DS_Store" -delete```
 
 use clap::Parser;
+use color_eyre::eyre;
 use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use std::path::Path;
 use tracing::{debug, info, trace};
 
-// TODO: add checks for extant directory
-//       AND check/warning re: git-submodule initialization
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 #[derive(Parser, Debug)]
-#[clap(author, version, about)] // from: `authors`, `version`, `about`
+#[clap(author, version, about)]
 struct InputStruct {
         project_name: String,
         cli_app_name: Option<String>,
@@ -30,7 +29,8 @@ struct InputStruct {
         test_coverage_min: u8,
 }
 
-fn main() {
+fn main() -> eyre::Result<()> {
+        color_eyre::install()?;
         // install global collector configured based on `RUST_LOG` env var.
         //     `RUST_LOG=info cargo run`
         //     `RUST_LOG ∊ {trace,debug,info,warn,error}`
@@ -74,4 +74,5 @@ fn main() {
         shell_actions::git_setup(proj_relative_path).expect("Failed to perform git repo setup");
 
         info!("Incarnate script complete.");
+        Ok(())
 }
