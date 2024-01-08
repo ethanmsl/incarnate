@@ -1,6 +1,6 @@
 [package]
 name = "incarnate"
-version = "0.2.2"
+version = "0.2.7"
 edition = "2021"
 authors = ["Ethan Skowronski-Lutz <33399972+ethanmsl@users.noreply.github.com>"]
 categories = ["cli", "utility", "app", "repo_generation", "template"]
