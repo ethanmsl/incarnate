@@ -11,7 +11,7 @@ use color_eyre::eyre;
 use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use std::path::Path;
-use tracing::{debug, info, trace};
+use tracing::{event, Level};
 
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
@@ -38,7 +38,7 @@ fn main() -> eyre::Result<()> {
         tracing_subscriber::fmt::init();
 
         let user_input = InputStruct::parse();
-        info!(user_input = ?user_input, "User input received:");
+        event!(Level::DEBUG, user_input = ?user_input, "User input received:");
 
         let replacement_pairs = [
                 ("${{ carnate.project_name }}", &user_input.project_name),
@@ -55,24 +55,24 @@ fn main() -> eyre::Result<()> {
                         &user_input.test_coverage_min.to_string(),
                 ),
         ];
-        info!(replacement_pairs = ?replacement_pairs, "Template Field:Value Pairs:");
+        event!(Level::DEBUG,replacement_pairs = ?replacement_pairs, "Template Field:Value Pairs:");
 
         println!("-------------");
         println!("Writing files to {:?}", user_input.project_name);
         // copy PROJECT_DIR to a current directory
         // NOTE: this can probably be removed on refactor with proper referencing of `ASSETS_DIR`
         let path = format!("parent/{}/", user_input.project_name);
-        debug!(path = ?path,"Path passed in for new directory location: ");
+        event!(Level::DEBUG, path = ?path,"Path passed in for new directory location: ");
         // TODO: add checks for ASSETS_DIR.entries() values as valid & directory creation
         // NOTE: ASSETS_DIR is a git-submodule, needs local init & update in fresh repo
         let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
-        trace!(new_dir_copy = ?new_dir_copy, "Newly created directory:");
+        event!(Level::TRACE, new_dir_copy = ?new_dir_copy, "Newly created directory:");
 
         template_populator::recursive_replace(new_dir_copy, &replacement_pairs);
         let proj_relative_path = Path::new(&user_input.project_name);
-        debug!(proj_relative_path = ?proj_relative_path,"Passing project path to shell actions:");
+        event!(Level::DEBUG,proj_relative_path = ?proj_relative_path,"Passing project path to shell actions:");
         shell_actions::git_setup(proj_relative_path).expect("Failed to perform git repo setup");
 
-        info!("Incarnate script complete.");
+        event!(Level::INFO, "Incarnate script complete.");
         Ok(())
 }
