@@ -9,7 +9,7 @@ use std::env;
 use std::io;
 use std::path::Path;
 use std::process::Command;
-use tracing::debug;
+use tracing::{event, Level};
 
 /// runs a series of shell commands to initialize a git repo
 #[tracing::instrument]
@@ -27,13 +27,22 @@ fn git_init(path: &Path) -> anyhow::Result<()> {
         let pathstring = path.to_str().context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
         let abs_path_proj = cwd + "/" + pathstring;
-        debug!( abs_path_proj = ?abs_path_proj, "git_init");
+
+        event!(Level::DEBUG, ?abs_path_proj, "git_init path is:");
 
         let mut git_cmd = Command::new("git");
         git_cmd.arg("init");
-        git_cmd.current_dir(abs_path_proj)
+        let git_init_out = git_cmd
+                .current_dir(abs_path_proj)
                 .output()
                 .context("Failed to run git init")?;
+        // BUG: status 128 - owner of local repo does not match runner of command
+        event!(
+                Level::DEBUG,
+                %git_init_out.status,
+                "git_init, status:"
+        );
+
         Ok(())
 }
 
@@ -43,7 +52,7 @@ fn git_add_all(path: &Path) -> anyhow::Result<()> {
         let pathstring = path.to_str().context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
         let abs_path_proj = cwd + "/" + pathstring;
-        debug!(abs_path_proj = ?abs_path_proj,"git_add_all");
+        event!(Level::DEBUG, ?abs_path_proj, "git_add_all");
 
         let mut git_cmd = Command::new("git");
         git_cmd.arg("add").arg(".");
@@ -60,7 +69,7 @@ fn git_initial_commit(path: &Path) -> anyhow::Result<()> {
         let pathstring = path.to_str().context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
         let abs_path_proj = cwd + "/" + pathstring;
-        debug!(abs_path_proj = ?abs_path_proj,"git_initial_commit");
+        event!(Level::DEBUG, ?abs_path_proj, "git_initial_commit");
 
         let mut git_cmd = Command::new("git");
         git_cmd.arg("commit")
@@ -84,16 +93,28 @@ fn move_pre_commit_hook(path: &Path) -> anyhow::Result<()> {
 
         let mut chmod_cmd = Command::new("chmod");
         chmod_cmd.arg("+x").arg("pre-commit");
-        chmod_cmd
+        let chmod_out = chmod_cmd
                 .current_dir(abs_path_proj.clone())
                 .output()
                 .context("Failed to run chmod +x pre-commit")?;
+        event!(
+                Level::DEBUG,
+                chmod_status = ?chmod_out.status,
+                "chmod of hook, status: "
+        );
 
         let mut mv_cmd = Command::new("mv");
         mv_cmd.arg("pre-commit").arg(".git/hooks/pre-commit");
-        mv_cmd.current_dir(abs_path_proj)
+        let mv_hook_out = mv_cmd
+                .current_dir(abs_path_proj)
                 .output()
                 .context("Failed to run mv pre-commit .git/hooks/pre-commit")?;
+        event!(
+                Level::DEBUG,
+                %mv_hook_out.status,
+                "move_pre_commit_hook, status:"
+        );
+
         Ok(())
 }
 

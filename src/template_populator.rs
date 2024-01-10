@@ -4,10 +4,11 @@
 
 use anyhow::Context;
 use std::path::Path;
+use tracing::{event, Level};
 
 /// works through a nested Enum or corresponding Dir & File value
 /// replacing patterns present in files or in path names
-#[tracing::instrument]
+#[tracing::instrument(skip(dir, pattern_val_pairs))]
 pub fn recursive_replace(
         dir: include_dir::Dir,
         pattern_val_pairs: &[(&str, &String)],
@@ -18,6 +19,7 @@ pub fn recursive_replace(
                                 let hydrated_string =
                                         replace_file_contents(file, pattern_val_pairs)
                                                 .context("unable to find utf8 file contents")?;
+                                event!(Level::TRACE, ?hydrated_string, "hydrated_string");
 
                                 let pathstring = file
                                         .path()
@@ -28,11 +30,13 @@ pub fn recursive_replace(
                                                 "${{ carnate.python-skeleton }}",
                                                 pattern_val_pairs[0].1,
                                         );
+                                event!(Level::TRACE, ?pathstring, "pathstring");
                                 // got into some opaque work regarding lifetime counting
                                 // so leaveing this here for right now
 
                                 let path = Path::new(&pathstring);
                                 write_file(path, hydrated_string)?;
+                                event!(Level::TRACE, ?path, "write path");
                         }
                         include_dir::DirEntry::Dir(dir) => {
                                 recursive_replace(dir.clone(), pattern_val_pairs)?;
@@ -68,5 +72,6 @@ fn write_file(filepath: &Path, hydrated_string: String) -> anyhow::Result<()> {
         std::fs::create_dir_all(filepath.parent().context("no parent")?)
                 .context("unable to create dir")?;
         std::fs::write(filepath, hydrated_string).context("unable to write file")?;
+        event!(Level::TRACE, ?filepath, "wrote to filepath:");
         Ok(())
 }
