@@ -1,5 +1,17 @@
 ( **Dev Use Note**: this uses a git submodule for the template assets, be sure to initialize and update if working on repo)
 
+# Who is this for?
+
+Mostly for my and my direct collaborators' use. Synchronizing coding idioms and application creation, providing educational materials that can be direclty segued into usable code, and a way of providing interactive documentation in the form of runnable code skeletons.
+This application hard-rolls templates into it. Speed and reliablity are fun side-effects of this, but its primary purposes is to ensure effort-free activation and synchronization when working with a team. (Also, it was a very early rust project and so was built around a goal that could be supported by a small, naive, body of code.)
+
+If you've stumbled on this it's probably not for you, as it is, by design specific to work involving myself and collaborators and has solid, but distinct choices made to its template. (e.g. use of Poetry, Polars, structlog, etc.) You can just point the [git-submodule](https://github.com/ethanmsl/incarnate/blob/master/.gitmodules) elsewhere and customize the template to your liking if you wanted though.
+
+If you're looking for a flexible templating application:
+
+- for Rust: I've had good success with [cargo generate](https://github.com/cargo-generate/cargo-generate), recently (late 2023).
+- for Python: I don't have personal experience, but [cookiecutter](https://github.com/cookiecutter/cookiecutter) looked the most promising to me when I last surveyed options (late 2023).
+
 # What is this, User-wise?
 
 This is effectively an API for a Skeleton Repo.
@@ -46,7 +58,7 @@ brew install incarnate
 ## Alternatives
 
 Otherwise you can compile the binary natively with Cargo.
-Or (for mac_x86 and mac_arm) download a one from the releases version on this page.
+Or, for mac_aarch64 (M1+ macs), download the binary from the release version in the GitHub repo.
 
 The following code, run locally to the binary (however you got it) should, on a mac, ensure that it is runnable as a terminal command.
 
