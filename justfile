@@ -43,7 +43,10 @@ open-pages ARCH="aarch64-apple-darwin":
         open https://github.com/ethanmsl/{{FILE}}/releases
         open https://github.com/ethanmsl/homebrew-{{FILE}}
 
-
+# run current build and then remove repo that was built.  (To see behavior and tracing results.)
+_test_run DEBUG_LEVEL="DEBUG" REPO_NAME=("toremove"+uuid()):
+        RUST_LOG={{DEBUG_LEVEL}} cargo run -- {{REPO_NAME}}
+        rm -rf {{REPO_NAME}}
 
 
 ### Brew Commands for debugging.  ###
