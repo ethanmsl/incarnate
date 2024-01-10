@@ -2,22 +2,27 @@
 //! Core element that recursively navigates templated assets and replaces variables
 //! of the form `${{ carnate.____ }}`
 
+use anyhow::Context;
 use std::path::Path;
 
 /// works through a nested Enum or corresponding Dir & File value
 /// replacing patterns present in files or in path names
-pub fn recursive_replace(dir: include_dir::Dir, pattern_val_pairs: &[(&str, &String)]) {
+#[tracing::instrument]
+pub fn recursive_replace(
+        dir: include_dir::Dir,
+        pattern_val_pairs: &[(&str, &String)],
+) -> anyhow::Result<()> {
         for entry in dir.entries() {
                 match entry {
                         include_dir::DirEntry::File(file) => {
                                 let hydrated_string =
                                         replace_file_contents(file, pattern_val_pairs)
-                                                .expect("unable to find utf8 file contents");
+                                                .context("unable to find utf8 file contents")?;
 
                                 let pathstring = file
                                         .path()
                                         .to_str()
-                                        .expect("unable to convert path to str")
+                                        .context("unable to convert path to str")?
                                         .replace(pattern_val_pairs[0].0, pattern_val_pairs[0].1)
                                         .replace(
                                                 "${{ carnate.python-skeleton }}",
@@ -27,17 +32,19 @@ pub fn recursive_replace(dir: include_dir::Dir, pattern_val_pairs: &[(&str, &Str
                                 // so leaveing this here for right now
 
                                 let path = Path::new(&pathstring);
-                                write_file(path, hydrated_string);
+                                write_file(path, hydrated_string)?;
                         }
                         include_dir::DirEntry::Dir(dir) => {
-                                recursive_replace(dir.clone(), pattern_val_pairs);
+                                recursive_replace(dir.clone(), pattern_val_pairs)?;
                         }
                 }
         }
+        Ok(())
 }
 
 /// checks file contents for any of an array of str patterns
 /// and replace them with a pair value if present
+#[tracing::instrument]
 fn replace_file_contents(
         file: &include_dir::File,
         pattern_val_pairs: &[(&str, &String)],
@@ -56,8 +63,10 @@ fn replace_file_contents(
 }
 
 /// writes files, creating directories as needed
-fn write_file(filepath: &Path, hydrated_string: String) {
-        std::fs::create_dir_all(filepath.parent().expect("no parent"))
-                .expect("unable to create dir");
-        std::fs::write(filepath, hydrated_string).expect("unable to write file");
+#[tracing::instrument]
+fn write_file(filepath: &Path, hydrated_string: String) -> anyhow::Result<()> {
+        std::fs::create_dir_all(filepath.parent().context("no parent")?)
+                .context("unable to create dir")?;
+        std::fs::write(filepath, hydrated_string).context("unable to write file")?;
+        Ok(())
 }

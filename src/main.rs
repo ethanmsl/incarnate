@@ -6,8 +6,8 @@
 //!     presently I'm just deleting them
 //!     ```find . -name ".DS_Store" -delete```
 
+use anyhow::Context;
 use clap::Parser;
-use color_eyre::eyre;
 use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use std::path::Path;
@@ -29,16 +29,12 @@ struct InputStruct {
         test_coverage_min: u8,
 }
 
-fn main() -> eyre::Result<()> {
-        color_eyre::install()?;
-        // install global collector configured based on `RUST_LOG` env var.
-        //     `RUST_LOG=info cargo run`
-        //     `RUST_LOG ∊ {trace,debug,info,warn,error}`
-        //  NOTE: `tracing-log` feature enabled, should be able to consume `log` events
+#[tracing::instrument]
+fn main() -> anyhow::Result<()> {
         tracing_subscriber::fmt::init();
 
         let user_input = InputStruct::parse();
-        event!(Level::DEBUG, user_input = ?user_input, "User input received:");
+        event!(Level::DEBUG, ?user_input, "User input received:");
 
         let replacement_pairs = [
                 ("${{ carnate.project_name }}", &user_input.project_name),
@@ -68,10 +64,10 @@ fn main() -> eyre::Result<()> {
         let new_dir_copy = Dir::new(&path, ASSETS_DIR.entries());
         event!(Level::TRACE, new_dir_copy = ?new_dir_copy, "Newly created directory:");
 
-        template_populator::recursive_replace(new_dir_copy, &replacement_pairs);
+        template_populator::recursive_replace(new_dir_copy, &replacement_pairs)?;
         let proj_relative_path = Path::new(&user_input.project_name);
         event!(Level::DEBUG,proj_relative_path = ?proj_relative_path,"Passing project path to shell actions:");
-        shell_actions::git_setup(proj_relative_path).expect("Failed to perform git repo setup");
+        shell_actions::git_setup(proj_relative_path).context("Failed to perform git repo setup")?;
 
         event!(Level::INFO, "Incarnate script complete.");
         Ok(())
