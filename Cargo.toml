@@ -1,6 +1,6 @@
 [package]
 name = "incarnate"
-version = "0.2.8"
+version = "0.2.9"
 edition = "2021"
 authors = ["Ethan Skowronski-Lutz <33399972+ethanmsl@users.noreply.github.com>"]
 categories = ["cli", "utility", "app", "repo_generation", "template"]
@@ -13,8 +13,8 @@ license = ""
 default-run = "incarnate"
 
 [dependencies]
+anyhow = { version = "1.0.79", features = ["backtrace"] }
 clap = { version = "4.4.13", features = ["derive"] }
-color-eyre = "0.6.2"
 include_dir = "0.7.3"
 struct-field-names-as-array = "0.3.0"
 tracing = "0.1.40"
