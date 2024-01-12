@@ -16,6 +16,8 @@ default-run = "incarnate"
 anyhow = { version = "1.0.79", features = ["backtrace"] }
 clap = { version = "4.4.13", features = ["derive"] }
 include_dir = "0.7.3"
+liquid = "0.26.4"
 struct-field-names-as-array = "0.3.0"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["tracing-log"] }
+walkdir = "2.4.0"
