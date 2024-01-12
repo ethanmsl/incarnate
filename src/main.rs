@@ -25,7 +25,7 @@ struct InputStruct {
         author_name: String,
         #[clap(short='e', long="email", default_value_t = String::from("email_not_supplied"))]
         no_reply_email: String,
-        #[clap(short = 'c', long = "coverage_minimum", default_value_t = 80)]
+        #[clap(short = 'c', long = "coverage_minimum", default_value_t = 50)]
         test_coverage_min: u8,
 }
 
