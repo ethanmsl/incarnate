@@ -3,6 +3,7 @@
 //! of the form `${{ carnate.____ }}`
 
 use anyhow::Context;
+use include_dir::DirEntry::{Dir, File};
 use std::path::Path;
 use tracing::{event, Level};
 
@@ -15,7 +16,13 @@ pub fn recursive_replace(
 ) -> anyhow::Result<()> {
         for entry in dir.entries() {
                 match entry {
-                        include_dir::DirEntry::File(file) => {
+                        File(submod_git)
+                                if submod_git.path().to_str().context("boo")?.ends_with(".git") =>
+                        {
+                                event!(Level::DEBUG, ?submod_git, "skipping file, as it is an artifact of the git submodule embedding of the assets");
+                                continue;
+                        }
+                        File(file) => {
                                 let hydrated_string =
                                         replace_file_contents(file, pattern_val_pairs)
                                                 .context("unable to find utf8 file contents")?;
@@ -38,7 +45,7 @@ pub fn recursive_replace(
                                 write_file(path, hydrated_string)?;
                                 event!(Level::TRACE, ?path, "write path");
                         }
-                        include_dir::DirEntry::Dir(dir) => {
+                        Dir(dir) => {
                                 recursive_replace(dir.clone(), pattern_val_pairs)?;
                         }
                 }
