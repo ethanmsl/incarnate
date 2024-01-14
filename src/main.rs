@@ -22,9 +22,9 @@ struct InputStruct {
         project_name: String,
         cli_app_name: Option<String>,
 
-        #[clap(short='a', long="author", default_value_t = String::from("author_name_not_supplied"))]
+        #[clap(short='a', long="author", default_value_t=String::from("author_name_not_supplied"))]
         author_name:       String,
-        #[clap(short='e', long="email", default_value_t = String::from("email_not_supplied"))]
+        #[clap(short='e', long="email", default_value_t=String::from("email_not_supplied"))]
         no_reply_email:    String,
         #[clap(short = 'c', long = "coverage_minimum", default_value_t = 50)]
         test_coverage_min: u8,
