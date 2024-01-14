@@ -54,8 +54,7 @@ fn git_add_all(path: &Path) -> anyhow::Result<()> {
         event!(Level::DEBUG, ?abs_path_proj, "git_add_all");
 
         let mut git_cmd = Command::new("git");
-        git_cmd.arg("add")
-               .arg(".");
+        git_cmd.arg("add").arg(".");
         git_cmd.current_dir(abs_path_proj)
                .output()
                .context("Failed to run git add .")?;
