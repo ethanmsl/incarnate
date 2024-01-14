@@ -6,11 +6,12 @@
 //!     presently I'm just deleting them
 //!     ```find . -name ".DS_Store" -delete```
 
+use std::path::Path;
+
 use anyhow::Context;
 use clap::Parser;
 use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
-use std::path::Path;
 use tracing::{event, Level};
 
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
@@ -21,10 +22,10 @@ struct InputStruct {
         project_name: String,
         cli_app_name: Option<String>,
 
-        #[clap(short='a', long="author", default_value_t = String::from("author_name_not_supplied"))]
-        author_name: String,
-        #[clap(short='e', long="email", default_value_t = String::from("email_not_supplied"))]
-        no_reply_email: String,
+        #[clap(short='a', long="author", default_value_t=String::from("author_name_not_supplied"))]
+        author_name:       String,
+        #[clap(short='e', long="email", default_value_t=String::from("email_not_supplied"))]
+        no_reply_email:    String,
         #[clap(short = 'c', long = "coverage_minimum", default_value_t = 50)]
         test_coverage_min: u8,
 }
@@ -36,21 +37,16 @@ fn main() -> anyhow::Result<()> {
         let user_input = InputStruct::parse();
         event!(Level::DEBUG, ?user_input, "User input received:");
 
-        let replacement_pairs = [
-                ("${{ carnate.project_name }}", &user_input.project_name),
-                ("${{ carnate.author_name }}", &user_input.author_name),
-                ("${{ carnate.no_reply_email }}", &user_input.no_reply_email),
-                (
-                        "${{ carnate.cli_app_name }}",
-                        &user_input
-                                .cli_app_name
-                                .unwrap_or(user_input.project_name.clone()),
-                ),
-                (
-                        "${{ carnate.test_coverage_min }}",
-                        &user_input.test_coverage_min.to_string(),
-                ),
-        ];
+        let replacement_pairs = [("${{ carnate.project_name }}", &user_input.project_name),
+                                 ("${{ carnate.author_name }}", &user_input.author_name),
+                                 ("${{ carnate.no_reply_email }}", &user_input.no_reply_email),
+                                 ("${{ carnate.cli_app_name }}",
+                                  &user_input.cli_app_name
+                                             .unwrap_or(user_input.project_name
+                                                                  .clone())),
+                                 ("${{ carnate.test_coverage_min }}",
+                                  &user_input.test_coverage_min
+                                             .to_string())];
         event!(Level::DEBUG,replacement_pairs = ?replacement_pairs, "Template Field:Value Pairs:");
 
         println!("-------------");

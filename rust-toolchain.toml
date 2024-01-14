@@ -1,0 +1,5 @@
+# rust-toolchain
+# link describing options for this file: https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file
+
+[toolchain]
+channel = "nightly"
