@@ -9,12 +9,12 @@ fn main() -> anyhow::Result<()> {
             "num": 78_f64
         });
 
-        let template = liquid::ParserBuilder::with_stdlib()
-                .build()?
-                .parse("Liquid! {{num | minus: 12}}")
-                .unwrap();
+        let template = liquid::ParserBuilder::with_stdlib().build()?
+                                                           .parse("Liquid! {{num | minus: 12}}")
+                                                           .unwrap();
 
-        let output = template.render(&globals).unwrap();
+        let output = template.render(&globals)
+                             .unwrap();
         println!("rendered template: {}", output);
 
         Ok(())

@@ -8,7 +8,9 @@ use walkdir::WalkDir;
 fn main() -> anyhow::Result<()> {
         for entry in WalkDir::new("assets") {
                 let entry = entry?;
-                println!("{}", entry.path().display());
+                println!("{}",
+                         entry.path()
+                              .display());
         }
         Ok(())
 }
