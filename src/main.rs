@@ -44,11 +44,17 @@ fn main() -> anyhow::Result<()> {
                         "${{ carnate.cli_app_name }}",
                         &user_input
                                 .cli_app_name
-                                .unwrap_or(user_input.project_name.clone()),
+                                .unwrap_or(
+                                        user_input
+                                                .project_name
+                                                .clone(),
+                                ),
                 ),
                 (
                         "${{ carnate.test_coverage_min }}",
-                        &user_input.test_coverage_min.to_string(),
+                        &user_input
+                                .test_coverage_min
+                                .to_string(),
                 ),
         ];
         event!(Level::DEBUG,replacement_pairs = ?replacement_pairs, "Template Field:Value Pairs:");

@@ -17,11 +17,15 @@ pub fn recursive_replace(
         for entry in dir.entries() {
                 match entry {
                         File(submod_git)
-                                if submod_git.path().to_str().context("boo")?.ends_with(".git") =>
+                                if submod_git
+                                        .path()
+                                        .to_str()
+                                        .context("boo")?
+                                        .ends_with(".git") =>
                         {
                                 event!(Level::DEBUG, ?submod_git, "skipping file, as it is an artifact of the git submodule embedding of the assets");
                                 continue;
-                        }
+                        },
                         File(file) => {
                                 let hydrated_string =
                                         replace_file_contents(file, pattern_val_pairs)
@@ -44,10 +48,10 @@ pub fn recursive_replace(
                                 let path = Path::new(&pathstring);
                                 write_file(path, hydrated_string)?;
                                 event!(Level::TRACE, ?path, "write path");
-                        }
+                        },
                         Dir(dir) => {
                                 recursive_replace(dir.clone(), pattern_val_pairs)?;
-                        }
+                        },
                 }
         }
         Ok(())
@@ -68,7 +72,7 @@ fn replace_file_contents(
                                         acc.replace(pair.0, pair.1)
                                 });
                         Some(hydrated_file)
-                }
+                },
                 None => None,
         }
 }
@@ -76,8 +80,11 @@ fn replace_file_contents(
 /// writes files, creating directories as needed
 #[tracing::instrument]
 fn write_file(filepath: &Path, hydrated_string: String) -> anyhow::Result<()> {
-        std::fs::create_dir_all(filepath.parent().context("no parent")?)
-                .context("unable to create dir")?;
+        std::fs::create_dir_all(
+                filepath.parent()
+                        .context("no parent")?,
+        )
+        .context("unable to create dir")?;
         std::fs::write(filepath, hydrated_string).context("unable to write file")?;
         event!(Level::TRACE, ?filepath, "wrote to filepath:");
         Ok(())

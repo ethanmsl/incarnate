@@ -24,7 +24,9 @@ pub fn git_setup(path: &Path) -> anyhow::Result<()> {
 /// runs `git init` in a given directory
 #[tracing::instrument]
 fn git_init(path: &Path) -> anyhow::Result<()> {
-        let pathstring = path.to_str().context("Failed to convert path to string")?;
+        let pathstring = path
+                .to_str()
+                .context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
         let abs_path_proj = cwd + "/" + pathstring;
 
@@ -49,13 +51,16 @@ fn git_init(path: &Path) -> anyhow::Result<()> {
 /// runs `git add .` in a given directory
 #[tracing::instrument]
 fn git_add_all(path: &Path) -> anyhow::Result<()> {
-        let pathstring = path.to_str().context("Failed to convert path to string")?;
+        let pathstring = path
+                .to_str()
+                .context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
         let abs_path_proj = cwd + "/" + pathstring;
         event!(Level::DEBUG, ?abs_path_proj, "git_add_all");
 
         let mut git_cmd = Command::new("git");
-        git_cmd.arg("add").arg(".");
+        git_cmd.arg("add")
+                .arg(".");
         git_cmd.current_dir(abs_path_proj)
                 .output()
                 .context("Failed to run git add .")?;
@@ -66,7 +71,9 @@ fn git_add_all(path: &Path) -> anyhow::Result<()> {
 /// ignores git hooks
 #[tracing::instrument]
 fn git_initial_commit(path: &Path) -> anyhow::Result<()> {
-        let pathstring = path.to_str().context("Failed to convert path to string")?;
+        let pathstring = path
+                .to_str()
+                .context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
         let abs_path_proj = cwd + "/" + pathstring;
         event!(Level::DEBUG, ?abs_path_proj, "git_initial_commit");
@@ -87,12 +94,16 @@ fn git_initial_commit(path: &Path) -> anyhow::Result<()> {
 /// the `.git/hooks` dir of a recently created git instance
 #[tracing::instrument]
 fn move_pre_commit_hook(path: &Path) -> anyhow::Result<()> {
-        let pathstring = path.to_str().context("Failed to convert path to string")?;
+        let pathstring = path
+                .to_str()
+                .context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
         let abs_path_proj = cwd + "/" + pathstring;
 
         let mut chmod_cmd = Command::new("chmod");
-        chmod_cmd.arg("+x").arg("pre-commit");
+        chmod_cmd
+                .arg("+x")
+                .arg("pre-commit");
         let chmod_out = chmod_cmd
                 .current_dir(abs_path_proj.clone())
                 .output()
@@ -104,7 +115,8 @@ fn move_pre_commit_hook(path: &Path) -> anyhow::Result<()> {
         );
 
         let mut mv_cmd = Command::new("mv");
-        mv_cmd.arg("pre-commit").arg(".git/hooks/pre-commit");
+        mv_cmd.arg("pre-commit")
+                .arg(".git/hooks/pre-commit");
         let mv_hook_out = mv_cmd
                 .current_dir(abs_path_proj)
                 .output()
