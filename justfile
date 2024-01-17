@@ -15,6 +15,7 @@ git-submodules:
 
 # Build a release version for specific architectures.
 build ARCH="aarch64-apple-darwin":
+        cargo clean
         cargo build --release --target {{ARCH}}
         cd ./target/{{ARCH}}/release && tar czf {{FILE}}-{{ARCH}}.tar.gz {{FILE}}
         shasum --algorithm 256 target/{{ARCH}}/release/{{FILE}}-{{ARCH}}.tar.gz
