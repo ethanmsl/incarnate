@@ -1,28 +1,30 @@
 # rustfmt.toml
 # web description of options: https://rust-lang.github.io/rustfmt/?version=v1.6.0&search=
 
-#required_version                 # specify rustfmt version requirement
+# required_version         # specify rustfmt version requirement
+# ignore = []              # files for rustfmt to ignore
 
-brace_style = "PreferSameLine"     # braces start on line of what they connect to
-chain_width = 30                   # default: 60
+
+brace_style = "PreferSameLine"          # braces start on line of what they connect to
+chain_width = 30                        # default: 60
 control_brace_style = "ClosingNextLine" # e.g. if & else in line with eachother
 
-#format_strings = true             # auto line-break strings (easier to read, more annoying to edit)
-#ignore = []                       # files for rustfmt to ignore
-indent_style = "visual"            # nests inline with thing needing verticality
+# format_strings = true        # auto line-break strings (easier to read, more annoying to edit)
+indent_style = "visual"      # nests inline with thing needing verticality
+# inline_attribute_width=50    # distance to allow attributes on same lines a what they tag
 
-#inline_attribute_width=50         # distance to allow attributes on same lines a what they tag
-match_arm_blocks = false           # only use {} if multiple statements (vs multline single statements)
-match_block_trailing_comma = true  # commas between all match arms ({},)
+match_arm_blocks = false          # only use {} if multiple statements (vs multline single statements)
+match_block_trailing_comma = true # commas between all match arms ({},)
+imports_granularity = "Crate"     # group all imports for a crate together
 
-imports_granularity = "Crate"      # group all imports for a crate together
-overflow_delimited_expr = true     # no double nesting for verticle formatted lists, etc.
-reorder_impl_items = true          # assoc_type & const at top of impl
+overflow_delimited_expr = true # no double nesting for verticle formatted lists, etc.
+reorder_impl_items = true      # assoc_type & const at top of impl
+merge_derives = false          # merging can make reading harder
 
 group_imports = "StdExternalCrate" # category style grouping of imports (ala isort in python)
 struct_field_align_threshold = 20  # move distance to seek type alignment in struct fields
 tab_spaces = 8                     # legible groups! :)
 
-trailing_semicolon = false         # no `;` after continue/break/return
-use_field_init_shorthand = true    # let _ = some_struct {x, y, z}
-where_single_line = true           # where on single line if few types
+trailing_semicolon = false      # no `;` after continue/break/return
+use_field_init_shorthand = true # let _ = some_struct {x, y, z}
+where_single_line = true        # where on single line if few types
