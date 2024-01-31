@@ -23,7 +23,7 @@ pub fn recursive_replace(dir: include_dir::Dir,
                                              .ends_with(".git") =>
                         {
                                 event!(Level::DEBUG, ?submod_git, "skipping file, as it is an artifact of the git submodule embedding of the assets");
-                                continue;
+                                continue
                         },
                         File(file) => {
                                 let hydrated_string =
