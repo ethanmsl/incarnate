@@ -6,12 +6,12 @@
 
 use std::{env, io, path::Path, process::Command};
 
-use anyhow::Context;
+use color_eyre::eyre::{ContextCompat, Result, WrapErr};
 use tracing::{event, Level};
 
 /// runs a series of shell commands to initialize a git repo
 #[tracing::instrument]
-pub fn git_setup(path: &Path) -> anyhow::Result<()> {
+pub fn git_setup(path: &Path) -> Result<()> {
         git_init(path)?;
         move_pre_commit_hook(path)?;
         git_add_all(path)?;
@@ -21,7 +21,7 @@ pub fn git_setup(path: &Path) -> anyhow::Result<()> {
 
 /// runs `git init` in a given directory
 #[tracing::instrument]
-fn git_init(path: &Path) -> anyhow::Result<()> {
+fn git_init(path: &Path) -> Result<()> {
         let pathstring = path.to_str()
                              .context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
@@ -34,7 +34,6 @@ fn git_init(path: &Path) -> anyhow::Result<()> {
         let git_init_out = git_cmd.current_dir(abs_path_proj)
                                   .output()
                                   .context("Failed to run git init")?;
-        // BUG: status 128 - owner of local repo does not match runner of command
         event!(
                 Level::DEBUG,
                 %git_init_out.status,
@@ -46,7 +45,7 @@ fn git_init(path: &Path) -> anyhow::Result<()> {
 
 /// runs `git add .` in a given directory
 #[tracing::instrument]
-fn git_add_all(path: &Path) -> anyhow::Result<()> {
+fn git_add_all(path: &Path) -> Result<()> {
         let pathstring = path.to_str()
                              .context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
@@ -64,7 +63,7 @@ fn git_add_all(path: &Path) -> anyhow::Result<()> {
 /// runs a commit with "initial commit" in a given directory
 /// ignores git hooks
 #[tracing::instrument]
-fn git_initial_commit(path: &Path) -> anyhow::Result<()> {
+fn git_initial_commit(path: &Path) -> Result<()> {
         let pathstring = path.to_str()
                              .context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
@@ -86,7 +85,7 @@ fn git_initial_commit(path: &Path) -> anyhow::Result<()> {
 /// by original intention from the root of a created project directory to
 /// the `.git/hooks` dir of a recently created git instance
 #[tracing::instrument]
-fn move_pre_commit_hook(path: &Path) -> anyhow::Result<()> {
+fn move_pre_commit_hook(path: &Path) -> Result<()> {
         let pathstring = path.to_str()
                              .context("Failed to convert path to string")?;
         let cwd = get_current_working_dir()?;
@@ -121,7 +120,7 @@ fn move_pre_commit_hook(path: &Path) -> anyhow::Result<()> {
 
 /// gets workind directory and returns as a `String`
 #[tracing::instrument]
-fn get_current_working_dir() -> anyhow::Result<String> {
+fn get_current_working_dir() -> Result<String> {
         Ok(env::current_dir()?
                 .into_os_string()
                 .into_string()

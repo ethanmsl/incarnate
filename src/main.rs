@@ -8,11 +8,12 @@
 
 use std::path::Path;
 
-use anyhow::Context;
 use clap::Parser;
+use color_eyre::eyre::{Result, WrapErr};
 use incarnate::{shell_actions, template_populator};
 use include_dir::{include_dir, Dir};
 use tracing::{event, Level};
+use tracing_subscriber::{fmt, prelude::*, EnvFilter};
 
 static ASSETS_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
@@ -31,8 +32,11 @@ struct InputStruct {
 }
 
 #[tracing::instrument]
-fn main() -> anyhow::Result<()> {
-        tracing_subscriber::fmt::init();
+fn main() -> Result<()> {
+        tracing_subscriber::registry().with(fmt::layer())
+                                      .with(EnvFilter::from_default_env())
+                                      .init();
+        color_eyre::install()?;
 
         let user_input = InputStruct::parse();
         event!(Level::DEBUG, ?user_input, "User input received:");
@@ -66,5 +70,6 @@ fn main() -> anyhow::Result<()> {
         shell_actions::git_setup(proj_relative_path).context("Failed to perform git repo setup")?;
 
         event!(Level::INFO, "Incarnate script complete.");
+        println!("Incarnate script complete.");
         Ok(())
 }
