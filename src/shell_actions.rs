@@ -118,7 +118,7 @@ fn move_pre_commit_hook(path: &Path) -> Result<()> {
         Ok(())
 }
 
-/// gets workind directory and returns as a `String`
+/// gets working directory and returns as a `String`
 #[tracing::instrument]
 fn get_current_working_dir() -> Result<String> {
         Ok(env::current_dir()?
